@@ -28,6 +28,5 @@ jobs:
         run: |
           ./gradlew publish -PRacciRepoUsername=${{ secrets.REPO_PUBLISH_USERNAME }} -PRacciRepoPassword=${{ secrets.REPO_PUBLISH_PASSWORD }}
           ./gradlew createReobfPaperclipJar
-          sudo apt-get install rename -y
-          rename paperclip-1.18.1-R0.1-SNAPSHOT-reofb 1.18.1-${{ github.run_number }} build/libs/tentacles-paperclip-1.18.1-R0.1-SNAPSHOT-reobf.jar
-          gh release create "v1.18.1-${{ github.run_number }}" -t "Release 1.18.1-${{ github.run_number }}" build/libs/tentacles-1.18.1-${{ github.run_number }}.jar
+          mv /build/libs/tentacles-paperclip-1.18.1-R0.1-SNAPSHOT-reofb tentacles-1.18.1-${{ github.run_number }}.jar
+          gh release create "v1.18.1-${{ github.run_number }}" -t "Release 1.18.1-${{ github.run_number }}" tentacles-1.18.1-${{ github.run_number }}.jar
