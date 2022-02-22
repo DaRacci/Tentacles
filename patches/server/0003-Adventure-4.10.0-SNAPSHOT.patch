@@ -1,0 +1,273 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Racci <racci@racci.dev>
+Date: Tue, 22 Feb 2022 19:00:04 +1100
+Subject: [PATCH] Adventure 4.10.0-SNAPSHOT
+
+
+diff --git a/src/main/java/net/minecraft/commands/CommandSourceStack.java b/src/main/java/net/minecraft/commands/CommandSourceStack.java
+index 21b3532c29f2f1bcf1eb02a28ab107e9f6531393..dd8107eff2faebc2d2abf11be19a3b3d6d55c91b 100644
+--- a/src/main/java/net/minecraft/commands/CommandSourceStack.java
++++ b/src/main/java/net/minecraft/commands/CommandSourceStack.java
+@@ -260,7 +260,7 @@ public class CommandSourceStack implements SharedSuggestionProvider, com.destroy
+         if (message == null) {
+             return;
+         }
+-        sendSuccess(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(message), broadcastToOps);
++        sendSuccess(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), broadcastToOps); // Tentacles - Update Adventure
+     }
+ 
+     public void sendSuccess(@Nullable net.kyori.adventure.text.Component message) {
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 22b66c8333c9d82ba75f33162ea9bad12f3eed40..10a763c1be961a213ac03660b838ea5ab6c738ad 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -975,7 +975,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+                         return;
+                     }
+                     if (!org.purpurmc.purpur.PurpurConfig.sleepSkippingNight.equalsIgnoreCase("default")) {
+-                        chatmessage = io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(org.purpurmc.purpur.PurpurConfig.sleepSkippingNight));
++                        chatmessage = io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(org.purpurmc.purpur.PurpurConfig.sleepSkippingNight)); // Tentacles - Update Adventure
+                     } else
+                     // Purpur end
+                     chatmessage = new TranslatableComponent("sleep.skipping_night");
+@@ -985,9 +985,11 @@ public class ServerLevel extends Level implements WorldGenLevel {
+                         return;
+                     }
+                     if (!org.purpurmc.purpur.PurpurConfig.sleepingPlayersPercent.equalsIgnoreCase("default")) {
+-                        chatmessage = io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(org.purpurmc.purpur.PurpurConfig.sleepingPlayersPercent,
+-                                net.kyori.adventure.text.minimessage.Template.of("count", Integer.toString(this.sleepStatus.amountSleeping())),
+-                                net.kyori.adventure.text.minimessage.Template.of("total", Integer.toString(this.sleepStatus.sleepersNeeded(i)))));
++                        // Tentacles start - Update Adventure
++                        chatmessage = io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(org.purpurmc.purpur.PurpurConfig.sleepingPlayersPercent,
++                                net.kyori.adventure.text.minimessage.tag.resolver.TagResolver.resolver("count", net.kyori.adventure.text.minimessage.tag.Tag.preProcessParsed(Integer.toString(this.sleepStatus.amountSleeping()))),
++                                net.kyori.adventure.text.minimessage.tag.resolver.TagResolver.resolver("total", net.kyori.adventure.text.minimessage.tag.Tag.preProcessParsed(Integer.toString(this.sleepStatus.sleepersNeeded(i))))));
++                                // Tentacles end
+                     } else
+                     // Purpur end
+                     chatmessage = new TranslatableComponent("sleep.players_sleeping", new Object[]{this.sleepStatus.amountSleeping(), this.sleepStatus.sleepersNeeded(i)});
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 61b0b0a847042557d7b9cd20f0ad51f0ff1751b8..f0758f664da80835cfbe31b325041bb185e6b804 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -1733,7 +1733,7 @@ public class ServerPlayer extends Player {
+     // Purpur start
+     public void sendActionBarMessage(@Nullable String message) {
+         if (message != null) {
+-            sendActionBarMessage(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(message));
++            sendActionBarMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message)); // Tentacles - Update Adventure
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
+index 547158e80c501aec66f4ffc96c0a496a346e0dd3..920dcd1be8278e01297fbf2a1db3380284ef56d9 100644
+--- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
+@@ -341,7 +341,7 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+                         ServerLoginPacketListenerImpl.this.gameProfile = ServerLoginPacketListenerImpl.this.createFakeProfile(gameprofile);
+                         ServerLoginPacketListenerImpl.this.state = ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT;
+                     } else {
+-                        ServerLoginPacketListenerImpl.this.disconnect(org.purpurmc.purpur.PurpurConfig.unverifiedUsername.equals("default") ? new TranslatableComponent("multiplayer.disconnect.unverified_username") : PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(org.purpurmc.purpur.PurpurConfig.unverifiedUsername))); // Purpur
++                        ServerLoginPacketListenerImpl.this.disconnect(org.purpurmc.purpur.PurpurConfig.unverifiedUsername.equals("default") ? new TranslatableComponent("multiplayer.disconnect.unverified_username") : PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(org.purpurmc.purpur.PurpurConfig.unverifiedUsername))); // Purpur // Tentacles - Update Adventure
+                         ServerLoginPacketListenerImpl.LOGGER.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
+                     }
+                 } catch (AuthenticationUnavailableException authenticationunavailableexception) {
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index ebddd006afe4960ac90642d4683c5cc8ef0ac33e..9d32a6e3efcd2fbdf570888410da52132aa85ecc 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -1419,7 +1419,7 @@ public abstract class PlayerList {
+ 
+     public void broadcast(@Nullable String message, ChatType type, UUID sender) {
+         if (message != null) {
+-            broadcast(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(message), type, sender);
++            broadcast(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), type, sender); // Tentacles - Update Adventure
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+index 0f56c60962b9c61c72d05edc7d9b10e93a119329..514b499fb75c1a212f187b6e98469826a5c6aef0 100644
+--- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
++++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
+@@ -251,8 +251,10 @@ public class DamageSource {
+     // Purpur start
+     public Component getLocalizedDeathMessage(String str, LivingEntity entity) {
+         net.kyori.adventure.text.Component name = io.papermc.paper.adventure.PaperAdventure.asAdventure(entity.getDisplayName());
+-        net.kyori.adventure.text.minimessage.Template template = net.kyori.adventure.text.minimessage.Template.of("player", name);
+-        net.kyori.adventure.text.Component component = net.kyori.adventure.text.minimessage.MiniMessage.get().parse(str, template);
++        // Tentacles start - Update Adventure
++        net.kyori.adventure.text.minimessage.tag.resolver.TagResolver resolver = net.kyori.adventure.text.minimessage.tag.resolver.TagResolver.resolver("player", net.kyori.adventure.text.minimessage.tag.Tag.inserting(name));
++        net.kyori.adventure.text.Component component = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(str, resolver);
++        // Tentacles end
+         return io.papermc.paper.adventure.PaperAdventure.asVanilla(component);
+     }
+     // Purpur end
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 33c76e6eab1e8a314caa3c68f9e19cdad197124b..ba1305e42ca62e756e7d84e0bb90bef3c871537a 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -3687,7 +3687,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+ 
+     public void sendMessage(@Nullable String message, UUID sender) {
+         if (org.apache.commons.lang3.StringUtils.isNotEmpty(message)) {
+-            sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(message), sender);
++            sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message), sender); // Tentacles - Update Adventure
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/SpawnerBlock.java b/src/main/java/net/minecraft/world/level/block/SpawnerBlock.java
+index bc4646a7a72c33a3671115953a2bbd7cfe5d7d92..8a8ceb91806ccc710cff5fa6637d4b3759c1975f 100644
+--- a/src/main/java/net/minecraft/world/level/block/SpawnerBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/SpawnerBlock.java
+@@ -3,6 +3,8 @@ package net.minecraft.world.level.block;
+ import javax.annotation.Nullable;
+ 
+ import net.kyori.adventure.text.minimessage.MiniMessage;
++import net.kyori.adventure.text.minimessage.tag.Tag;
++import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.nbt.CompoundTag;
+ import net.minecraft.nbt.ListTag;
+@@ -66,7 +68,7 @@ public class SpawnerBlock extends BaseEntityBlock {
+ 
+                 String name = level.purpurConfig.silkTouchSpawnerName;
+                 if (name != null && !name.isEmpty() && !name.equals("Spawner")) {
+-                    Component displayName = MiniMessage.get().parse(name, "mob", mobName);
++                    Component displayName = MiniMessage.miniMessage().deserialize(name, TagResolver.resolver("mob", Tag.inserting(mobName))); // Tentacles - Update Adventure
+                     if (name.startsWith("<reset>")) {
+                         displayName = displayName.decoration(ITALIC, false);
+                     }
+@@ -78,7 +80,7 @@ public class SpawnerBlock extends BaseEntityBlock {
+                 if (lore != null && !lore.isEmpty()) {
+                     ListTag list = new ListTag();
+                     for (String line : lore) {
+-                        Component lineComponent = MiniMessage.get().parse(line, "mob", mobName);
++                        Component lineComponent = MiniMessage.miniMessage().deserialize(line, TagResolver.resolver("mob", Tag.inserting(mobName))); // Tentacles - Update Adventure
+                         if (line.startsWith("<reset>")) {
+                             lineComponent = lineComponent.decoration(ITALIC, false);
+                         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 85daead2568eb2bc09843f7841652b7ea8dc161d..1e33fea3061a1fbc45f3849b51e6ad91e3ea9e69 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -443,7 +443,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         if (name == null) {
+             name = getName();
+         }
+-        this.getHandle().listName = name.equals(getName()) ? null : useMM ? io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.get().parse(name)) : CraftChatMessage.fromStringOrNull(name); // Purpur
++        this.getHandle().listName = name.equals(getName()) ? null : useMM ? io.papermc.paper.adventure.PaperAdventure.asVanilla(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(name)) : CraftChatMessage.fromStringOrNull(name); // Purpur // Tentacles - Update Adventure
+         for (ServerPlayer player : (List<ServerPlayer>) server.getHandle().players) {
+             if (player.getBukkitEntity().canSee(this)) {
+                 player.connection.send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.UPDATE_DISPLAY_NAME, this.getHandle()));
+diff --git a/src/main/java/org/purpurmc/purpur/command/TPSBarCommand.java b/src/main/java/org/purpurmc/purpur/command/TPSBarCommand.java
+index 3de9dfba6bc7c438c093a8dca1f647f6c3de3c08..66c65616087088465aeeba76649d7ec0c4f629be 100644
+--- a/src/main/java/org/purpurmc/purpur/command/TPSBarCommand.java
++++ b/src/main/java/org/purpurmc/purpur/command/TPSBarCommand.java
+@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
+ import net.kyori.adventure.text.Component;
+ import net.kyori.adventure.text.format.NamedTextColor;
+ import net.kyori.adventure.text.minimessage.MiniMessage;
++import net.kyori.adventure.text.minimessage.tag.Tag;
++import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+ import net.minecraft.commands.CommandSourceStack;
+ import net.minecraft.commands.Commands;
+ import net.minecraft.commands.arguments.EntityArgument;
+@@ -30,11 +32,12 @@ public class TPSBarCommand {
+             boolean result = TPSBarTask.instance().togglePlayer(player.getBukkitEntity());
+             player.tpsBar(result);
+ 
+-            Component output = MiniMessage.get().parse(PurpurConfig.tpsbarCommandOutput,
+-                    "onoff", Component.translatable(result ? "options.on" : "options.off")
+-                            .color(result ? NamedTextColor.GREEN : NamedTextColor.RED),
+-                    "target", player.getGameProfile().getName());
+-
++            // Tentacles start - Update Adventure
++            Component output = MiniMessage.miniMessage().deserialize(PurpurConfig.tpsbarCommandOutput,
++                    TagResolver.resolver("onoff", Tag.inserting(Component.translatable(result ? "options.on" : "options.off")
++                            .color(result ? NamedTextColor.GREEN : NamedTextColor.RED))),
++                    TagResolver.resolver("target", Tag.preProcessParsed(player.getGameProfile().getName())));
++            // Tentacles end
+             sender.sendSuccess(output, false);
+         }
+         return targets.size();
+diff --git a/src/main/java/org/purpurmc/purpur/command/UptimeCommand.java b/src/main/java/org/purpurmc/purpur/command/UptimeCommand.java
+index 177a03c07c331a505d2b0ccfeb5509058e5449a1..901b640434b53ccb141ba6d0c7c37069f102c6f4 100644
+--- a/src/main/java/org/purpurmc/purpur/command/UptimeCommand.java
++++ b/src/main/java/org/purpurmc/purpur/command/UptimeCommand.java
+@@ -3,7 +3,8 @@ package org.purpurmc.purpur.command;
+ import com.mojang.brigadier.CommandDispatcher;
+ import net.kyori.adventure.text.Component;
+ import net.kyori.adventure.text.minimessage.MiniMessage;
+-import net.kyori.adventure.text.minimessage.Template;
++import net.kyori.adventure.text.minimessage.tag.Tag;
++import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+ import net.minecraft.commands.CommandSourceStack;
+ import net.minecraft.commands.Commands;
+ import net.minecraft.server.MinecraftServer;
+@@ -33,7 +34,7 @@ public class UptimeCommand {
+         data.hide = false; // never hide seconds
+         process(data, "<seconds>", PurpurConfig.uptimeSecond, PurpurConfig.uptimeSeconds, TimeUnit.SECONDS, TimeUnit.MILLISECONDS::toSeconds);
+ 
+-        Component output = MiniMessage.get().parse(PurpurConfig.uptimeCommandOutput, Template.of("uptime", data.format));
++        Component output = MiniMessage.miniMessage().deserialize(PurpurConfig.uptimeCommandOutput, TagResolver.resolver("uptime", Tag.preProcessParsed(data.format))); // Tentacles - Update Adventure
+         sender.sendSuccess(output, false);
+         return 1;
+     }
+diff --git a/src/main/java/org/purpurmc/purpur/task/TPSBarTask.java b/src/main/java/org/purpurmc/purpur/task/TPSBarTask.java
+index 6c4d5167a9d965edbb25f4c24e6bb885afe281ca..83ba3dd4fc2301e9a403c51bd2307a733c1b5be1 100644
+--- a/src/main/java/org/purpurmc/purpur/task/TPSBarTask.java
++++ b/src/main/java/org/purpurmc/purpur/task/TPSBarTask.java
+@@ -3,7 +3,8 @@ package org.purpurmc.purpur.task;
+ import net.kyori.adventure.bossbar.BossBar;
+ import net.kyori.adventure.text.Component;
+ import net.kyori.adventure.text.minimessage.MiniMessage;
+-import net.kyori.adventure.text.minimessage.Template;
++import net.kyori.adventure.text.minimessage.tag.Tag;
++import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+ import org.purpurmc.purpur.PurpurConfig;
+ import org.bukkit.Bukkit;
+ import org.bukkit.entity.Player;
+@@ -30,11 +31,13 @@ public class TPSBarTask extends BossBarTask {
+     void updateBossBar(BossBar bossbar, Player player) {
+         bossbar.progress(getBossBarProgress());
+         bossbar.color(getBossBarColor());
+-        bossbar.name(MiniMessage.get().parse(PurpurConfig.commandTPSBarTitle,
+-                Template.of("tps", getTPSColor()),
+-                Template.of("mspt", getMSPTColor()),
+-                Template.of("ping", getPingColor(player.getPing()))
++        // Tentacles start - Update Adventure
++        bossbar.name(MiniMessage.miniMessage().deserialize(PurpurConfig.commandTPSBarTitle,
++                TagResolver.resolver("tps", Tag.inserting(getTPSColor())),
++                TagResolver.resolver("mspt", Tag.inserting(getMSPTColor())),
++                TagResolver.resolver("ping", Tag.inserting(getPingColor(player.getPing())))
+         ));
++        // Tentacles end
+     }
+ 
+     @Override
+@@ -109,7 +112,7 @@ public class TPSBarTask extends BossBarTask {
+         } else {
+             color = PurpurConfig.commandTPSBarTextColorLow;
+         }
+-        return MiniMessage.get().parse(color, Template.of("text", String.format("%.2f", tps)));
++        return MiniMessage.miniMessage().deserialize(color, TagResolver.resolver("text", Tag.preProcessParsed(String.format("%.2f", tps)))); // Tentacles - Update Adventure
+     }
+ 
+     private Component getMSPTColor() {
+@@ -121,7 +124,7 @@ public class TPSBarTask extends BossBarTask {
+         } else {
+             color = PurpurConfig.commandTPSBarTextColorLow;
+         }
+-        return MiniMessage.get().parse(color, Template.of("text", String.format("%.2f", mspt)));
++        return MiniMessage.miniMessage().deserialize(color, TagResolver.resolver("text", Tag.preProcessParsed(String.format("%.2f", mspt)))); // Tentacles - Update Adventure
+     }
+ 
+     private Component getPingColor(int ping) {
+@@ -133,7 +136,7 @@ public class TPSBarTask extends BossBarTask {
+         } else {
+             color = PurpurConfig.commandTPSBarTextColorLow;
+         }
+-        return MiniMessage.get().parse(color, Template.of("text", String.format("%s", ping)));
++        return MiniMessage.miniMessage().deserialize(color, TagResolver.resolver("text", Tag.preProcessParsed(String.format("%s", ping)))); // Tentacles - Update Adventure
+     }
+ 
+     public enum FillMode {

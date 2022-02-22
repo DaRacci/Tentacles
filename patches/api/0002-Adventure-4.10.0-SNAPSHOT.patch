@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Racci <racci@racci.dev>
+Date: Tue, 22 Feb 2022 18:41:07 +1100
+Subject: [PATCH] Adventure 4.10.0-SNAPSHOT
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index bac527acaa1826486a8183bcccb4d64654a0efed..fc7de67a982dfd3753afc22482a5b15061390702 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -33,7 +33,7 @@ dependencies {
+         isTransitive = false // includes junit
+     }
+     api("it.unimi.dsi:fastutil:8.5.6")
+-    apiAndDocs(platform("net.kyori:adventure-bom:$adventureVersion"))
++    apiAndDocs(platform("net.kyori:adventure-bom:4.10.0-SNAPSHOT")) // Tentacles
+     apiAndDocs("net.kyori:adventure-api")
+     apiAndDocs("net.kyori:adventure-text-serializer-gson")
+     apiAndDocs("net.kyori:adventure-text-serializer-legacy")
+@@ -41,7 +41,7 @@ dependencies {
+     api("org.apache.logging.log4j:log4j-api:2.17.1")
+     api("org.slf4j:slf4j-api:1.8.0-beta4")
+     api("io.sentry:sentry:5.4.0") // Pufferfish
+-    api("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT") // Purpur
++    api("net.kyori:adventure-text-minimessage:4.10.0-SNAPSHOT") // Purpur // Tentacles
+ 
+     implementation("org.ow2.asm:asm:9.2")
+     implementation("org.ow2.asm:asm-commons:9.2")
+diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
+index a991bfe33f695a6166be6937039098ddea892f7b..604e46e22942a852185d7b1da95114d2647ea402 100644
+--- a/src/main/java/org/bukkit/ChatColor.java
++++ b/src/main/java/org/bukkit/ChatColor.java
+@@ -456,7 +456,7 @@ public enum ChatColor {
+ 
+     @NotNull
+     public static net.kyori.adventure.text.Component parseMM(@NotNull String string, @Nullable Object... args) {
+-        return net.kyori.adventure.text.minimessage.MiniMessage.get().parse(String.format(string, args));
++        return net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(String.format(string, args)); // Tentacles
+     }
+ 
+     @Deprecated
