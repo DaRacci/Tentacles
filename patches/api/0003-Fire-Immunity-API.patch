@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Racci <racci@racci.dev>
+Date: Tue, 22 Feb 2022 19:06:45 +1100
+Subject: [PATCH] Fire Immunity API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 26847ed7bae8ae4e0a21106a0ff09a50af6ce689..983ba71ff59fadd044b4e6614ee3317a0195ea3c 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -885,4 +885,20 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      */
+     boolean isInDaylight();
+     // Purpur end
++
++    // Tentacles start
++
++    /**
++     * Checks if the entity is fire immune
++     *
++     * @return True if fire immune
++     */
++    boolean isImmuneToFire();
++
++    /**
++     * Sets if the entity is fire immune
++     * Set this to null to restore the entity type default
++     */
++    void setImmuneToFire(@Nullable Boolean fireImmune);
++    // Tentacles end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Item.java b/src/main/java/org/bukkit/entity/Item.java
+index 38ebf0f60113c5eff9d83e6a22ccdade651f419a..8bdccd50093419d73be9b20d1e789a63dc7b0144 100644
+--- a/src/main/java/org/bukkit/entity/Item.java
++++ b/src/main/java/org/bukkit/entity/Item.java
+@@ -173,7 +173,9 @@ public interface Item extends Entity {
+      * Set whether or not this item is immune to fire
+      *
+      * @param immuneToFire True to make immune to fire
++     * @deprecated use {@link #setImmuneToFire(Boolean)}
+      */
++    @Deprecated
+     void setImmuneToFire(boolean immuneToFire);
+ 
+     /**
