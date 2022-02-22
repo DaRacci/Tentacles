@@ -1,4 +1,4 @@
-import io.papermc.paperweight.util.constants.*
+import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 
 plugins {
     java
