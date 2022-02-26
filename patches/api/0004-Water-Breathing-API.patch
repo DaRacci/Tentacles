@@ -5,7 +5,7 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index bbae010cedf30d0e3336a8f03ee00a0a824cb08d..9604aebbf179e1be85ca648063e8d67d81278d55 100644
+index bbae010cedf30d0e3336a8f03ee00a0a824cb08d..ea4971ecd5d751c253ebe4fc4eb9abd871122376 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
 @@ -947,4 +947,22 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
@@ -21,7 +21,7 @@ index bbae010cedf30d0e3336a8f03ee00a0a824cb08d..9604aebbf179e1be85ca648063e8d67d
 +     *
 +     * @param canBreathUnderwater True to breath underwater
 +     */
-+    void setCanBreathUnderwater(Boolean canBreathUnderwater);
++    void setCanBreathUnderwater(@Nullable Boolean canBreathUnderwater);
 +
 +    /**
 +     * Get if this mob is able to breath underwater
