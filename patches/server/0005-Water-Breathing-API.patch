@@ -1,0 +1,51 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Racci <racci@racci.dev>
+Date: Sun, 27 Feb 2022 00:12:22 +1100
+Subject: [PATCH] Water Breathing API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 2ff8237f85afeaca852326367a3810e75c35812d..0f751c62da49fc59b642c1580c8d2c341d014d1e 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -261,6 +261,10 @@ public abstract class LivingEntity extends Entity {
+     public org.bukkit.craftbukkit.entity.CraftLivingEntity getBukkitLivingEntity() { return (org.bukkit.craftbukkit.entity.CraftLivingEntity) super.getBukkitEntity(); } // Paper
+     public boolean silentDeath = false; // Paper - mark entity as dying silently for cancellable death event
+     protected boolean shouldBurnInDay = false;  public boolean shouldBurnInDay() { return this.shouldBurnInDay; } public void setShouldBurnInDay(boolean shouldBurnInDay) { this.shouldBurnInDay = shouldBurnInDay; } // Purpur
++    // Tentacles start
++    @Nullable
++    public Boolean canBreathUnderwater = null;
++    // Tentacles end
+ 
+     @Override
+     public float getBukkitYaw() {
+@@ -373,7 +377,7 @@ public abstract class LivingEntity extends Entity {
+     }
+ 
+     public boolean canBreatheUnderwater() {
+-        return this.getMobType() == MobType.UNDEAD;
++        return canBreathUnderwater != null ? canBreathUnderwater : this.getMobType() == MobType.UNDEAD;
+     }
+ 
+     public float getSwimAmount(float tickDelta) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index ca767d5a8ecb1d0c41ed149fd77eb2f49221c919..030c578c692577cb0aa26db1aa1a9cd617675755 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -948,4 +948,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         getHandle().setShouldBurnInDay(shouldBurnInDay);
+     }
+     // Purpur end
++
++    // Tentacles start
++    @Override
++    public void setCanBreathUnderwater(Boolean canBreathUnderwater) {
++        getHandle().canBreathUnderwater = canBreathUnderwater;
++    }
++
++    @Override
++    public boolean canBreathUnderwater() {
++        return getHandle().canBreatheUnderwater();
++    }
++    // Tentacles end
+ }
