@@ -5,10 +5,10 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 2ff8237f85afeaca852326367a3810e75c35812d..0f751c62da49fc59b642c1580c8d2c341d014d1e 100644
+index 92154459fd46db7e9182952cc1f844298c2dcb3c..8934482bcdff71de0234a0e5af80ed2dda802273 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -261,6 +261,10 @@ public abstract class LivingEntity extends Entity {
+@@ -264,6 +264,10 @@ public abstract class LivingEntity extends Entity {
      public org.bukkit.craftbukkit.entity.CraftLivingEntity getBukkitLivingEntity() { return (org.bukkit.craftbukkit.entity.CraftLivingEntity) super.getBukkitEntity(); } // Paper
      public boolean silentDeath = false; // Paper - mark entity as dying silently for cancellable death event
      protected boolean shouldBurnInDay = false;  public boolean shouldBurnInDay() { return this.shouldBurnInDay; } public void setShouldBurnInDay(boolean shouldBurnInDay) { this.shouldBurnInDay = shouldBurnInDay; } // Purpur
@@ -19,7 +19,7 @@ index 2ff8237f85afeaca852326367a3810e75c35812d..0f751c62da49fc59b642c1580c8d2c34
  
      @Override
      public float getBukkitYaw() {
-@@ -373,7 +377,7 @@ public abstract class LivingEntity extends Entity {
+@@ -376,7 +380,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canBreatheUnderwater() {

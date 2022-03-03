@@ -1,7 +1,7 @@
 name: Build
 on:
   push:
-    branches: [ ver/1.18.1 ]
+    branches: [ ver/1.18.2 ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         run: |
           ./gradlew publish -PRacciRepoUsername=${{ secrets.REPO_PUBLISH_USERNAME }} -PRacciRepoPassword=${{ secrets.REPO_PUBLISH_PASSWORD }}
           ./gradlew createReobfPaperclipJar
-          mv build/libs/tentacles-paperclip-1.18.1-R0.1-SNAPSHOT-reobf.jar tentacles-1.18.1-${{ github.run_number }}.jar
-          gh release create "v1.18.1-${{ github.run_number }}" -t "Release 1.18.1-${{ github.run_number }}" tentacles-1.18.1-${{ github.run_number }}.jar
+          mv build/libs/tentacles-paperclip-1.18.2-R0.1-SNAPSHOT-reobf.jar tentacles-1.18.2-${{ github.run_number }}.jar
+          gh release create "v1.18.2-${{ github.run_number }}" -t "Release 1.18.2-${{ github.run_number }}" tentacles-1.18.2-${{ github.run_number }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
