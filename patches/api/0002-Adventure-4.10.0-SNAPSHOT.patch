@@ -5,24 +5,30 @@ Subject: [PATCH] Adventure 4.10.0-SNAPSHOT
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index bac527acaa1826486a8183bcccb4d64654a0efed..fc7de67a982dfd3753afc22482a5b15061390702 100644
+index bac527acaa1826486a8183bcccb4d64654a0efed..7eb27db364cb9b28f59089ecf3463ea54dc71ced 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -33,7 +33,7 @@ dependencies {
-         isTransitive = false // includes junit
-     }
+@@ -8,7 +8,7 @@ java {
+     withJavadocJar()
+ }
+ 
+-val adventureVersion = "4.9.3"
++val adventureVersion = "4.10.0"
+ val apiAndDocs: Configuration by configurations.creating {
+     attributes {
+         attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
+@@ -35,13 +35,13 @@ dependencies {
      api("it.unimi.dsi:fastutil:8.5.6")
--    apiAndDocs(platform("net.kyori:adventure-bom:$adventureVersion"))
-+    apiAndDocs(platform("net.kyori:adventure-bom:4.10.0-SNAPSHOT")) // Tentacles
+     apiAndDocs(platform("net.kyori:adventure-bom:$adventureVersion"))
      apiAndDocs("net.kyori:adventure-api")
++    apiAndDocs("net.kyori:adventure-text-minimessage") // Tentacles
      apiAndDocs("net.kyori:adventure-text-serializer-gson")
      apiAndDocs("net.kyori:adventure-text-serializer-legacy")
-@@ -41,7 +41,7 @@ dependencies {
+     apiAndDocs("net.kyori:adventure-text-serializer-plain")
      api("org.apache.logging.log4j:log4j-api:2.17.1")
      api("org.slf4j:slf4j-api:1.8.0-beta4")
      api("io.sentry:sentry:5.4.0") // Pufferfish
 -    api("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT") // Purpur
-+    api("net.kyori:adventure-text-minimessage:4.10.0-SNAPSHOT") // Purpur // Tentacles
  
      implementation("org.ow2.asm:asm:9.2")
      implementation("org.ow2.asm:asm-commons:9.2")
