@@ -1,7 +1,9 @@
 name: Build
 on:
+  workflow_dispatch
   push:
     branches: [ ver/1.18.2 ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
