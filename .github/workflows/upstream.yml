@@ -24,5 +24,6 @@ jobs:
           branch: ${{ github.ref }}
       - name: Trigger autobuild
         run: |
-          gh auth setup-git
           gh workflow run build.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
