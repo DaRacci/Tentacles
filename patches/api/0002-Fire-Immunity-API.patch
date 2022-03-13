@@ -30,10 +30,10 @@ index 3fa4f583c8d38c8cb62065f7f18986c985e4c92f..8d1e8795f0f1817a0f034f139ba87014
 +    // Tentacles end
  }
 diff --git a/src/main/java/org/bukkit/entity/Item.java b/src/main/java/org/bukkit/entity/Item.java
-index 38ebf0f60113c5eff9d83e6a22ccdade651f419a..8bdccd50093419d73be9b20d1e789a63dc7b0144 100644
+index fd213c026fdfb3030d0c37f651a88857ca038cba..81744c53b2defbbc4cb915968c17b3923220c3a2 100644
 --- a/src/main/java/org/bukkit/entity/Item.java
 +++ b/src/main/java/org/bukkit/entity/Item.java
-@@ -173,7 +173,9 @@ public interface Item extends Entity {
+@@ -187,7 +187,9 @@ public interface Item extends Entity {
       * Set whether or not this item is immune to fire
       *
       * @param immuneToFire True to make immune to fire

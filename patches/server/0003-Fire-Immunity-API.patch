@@ -71,7 +71,7 @@ index d575da51b4f1318734ebf26a3730871134e28102..6659323439e69f5ece9091f4bdb621a6
 +    // Tentacles end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
-index 0637e074dbe4a10bc19e7bf9dd79e2d966b07b1d..a272e048ceb77f5bef0d002580f9b90972768f8d 100644
+index f3bf5199bc7ddf8a3d0dc67a184e7690efa659eb..3c518648bf804006761a246cac08e64ab56d8d9f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftItem.java
 @@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -82,7 +82,7 @@ index 0637e074dbe4a10bc19e7bf9dd79e2d966b07b1d..a272e048ceb77f5bef0d002580f9b909
  
  public class CraftItem extends CraftEntity implements Item {
  
-@@ -155,7 +156,7 @@ public class CraftItem extends CraftEntity implements Item {
+@@ -172,7 +173,7 @@ public class CraftItem extends CraftEntity implements Item {
  
      @Override
      public void setImmuneToFire(boolean immuneToFire) {
@@ -91,7 +91,7 @@ index 0637e074dbe4a10bc19e7bf9dd79e2d966b07b1d..a272e048ceb77f5bef0d002580f9b909
      }
  
      @Override
-@@ -173,4 +174,11 @@ public class CraftItem extends CraftEntity implements Item {
+@@ -190,4 +191,11 @@ public class CraftItem extends CraftEntity implements Item {
          return item.immuneToLightning;
      }
      // Purpur end
