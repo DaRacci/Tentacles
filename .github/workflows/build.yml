@@ -5,7 +5,8 @@ on:
     workflows: [Upstream]
   workflow_dispatch:
   push:
-      branches: [ ver/1.18.2 ]
+    branches: [ ver/1.18.2 ]
+    paths-ignore:  [ '*.md', '*.yml' ]
 
 jobs:
   build:
@@ -31,7 +32,15 @@ jobs:
       - name: Build
         run: ./gradlew build --stacktrace
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            patches:
+              - 'patches/**'
+
       - name: Publish
+        if: steps.changes.outputs.src == 'true'
         run: |
           ./gradlew publish -PRacciRepoUsername=${{ secrets.REPO_PUBLISH_USERNAME }} -PRacciRepoPassword=${{ secrets.REPO_PUBLISH_PASSWORD }}
           ./gradlew createReobfPaperclipJar
