@@ -1,0 +1,154 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Fri, 20 May 2022 16:26:27 +1000
+Subject: [PATCH] Player discount API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d5a86bd683cd5da4071aa966f2bbe36aaf0879d3 100644
+--- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
++++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
+@@ -608,6 +608,10 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+                 if (merchantrecipe.ignoreDiscounts) continue; // Paper
+ 
+                 merchantrecipe.addToSpecialPriceDiff(-Mth.floor((float) i * merchantrecipe.getPriceMultiplier()));
++                // Tentacles start
++                if (merchantrecipe.playerDiscounts.containsKey(player)) {
++                    merchantrecipe.addToSpecialPriceDiff(-Mth.floor((float) i * merchantrecipe.playerDiscounts.get(player.getUUID())));
++                }
+             }
+         }
+ 
+@@ -625,7 +629,6 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+                 merchantrecipe1.addToSpecialPriceDiff(-Math.max(k, 1));
+             }
+         }
+-
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
+index 9a402505375af2051673245ec0a1daf9f3a66dc7..2f8dc3ecd0403663e5e22fff5172571735b2e8e9 100644
+--- a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
++++ b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
+@@ -6,6 +6,11 @@ import net.minecraft.util.Mth;
+ import net.minecraft.world.item.ItemStack;
+ 
+ import org.bukkit.craftbukkit.inventory.CraftMerchantRecipe; // CraftBukkit
++// Tentacles Start
++import java.util.HashMap;
++import java.util.Map;
++import java.util.UUID;
++// Tentacles End
+ 
+ public class MerchantOffer {
+ 
+@@ -20,6 +25,7 @@ public class MerchantOffer {
+     public float priceMultiplier;
+     public int xp;
+     public boolean ignoreDiscounts; // Paper
++    public Map<UUID, Float> playerDiscounts; // Tentacles
+     // CraftBukkit start
+     private CraftMerchantRecipe bukkitHandle;
+ 
+@@ -73,6 +79,16 @@ public class MerchantOffer {
+         this.specialPriceDiff = nbt.getInt("specialPrice");
+         this.demand = nbt.getInt("demand");
+         this.ignoreDiscounts = nbt.getBoolean("Paper.IgnoreDiscounts"); // Paper
++        // Tentacles start
++        if (nbt.contains("Tentacles.PlayerDiscounts")) {
++            CompoundTag compound = nbt.getCompound("Tentacles.PlayerDiscounts");
++            this.playerDiscounts = new HashMap<>();
++            compound.getAllKeys().forEach(key -> {
++                UUID uuid = UUID.fromString(key);
++                this.playerDiscounts.put(uuid, compound.getFloat(key));
++            });
++        }
++        // Tentacles ends
+     }
+ 
+     public MerchantOffer(ItemStack buyItem, ItemStack sellItem, int maxUses, int merchantExperience, float priceMultiplier) {
+@@ -95,8 +111,13 @@ public class MerchantOffer {
+         this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, false);
+     }
+     public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts) {
+-        this.ignoreDiscounts = ignoreDiscounts;
+-        // Paper end
++        // Tentacles start
++        this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, ignoreDiscounts, (Map<UUID, Float>) null);
++    }
++
++    public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts, Map<UUID, Float> playerDiscounts) {
++        this.ignoreDiscounts = false;
++        // Paper start - add ignoreDiscounts param
+         this.rewardExp = true;
+         this.xp = 1;
+         this.baseCostA = firstBuyItem;
+@@ -107,7 +128,9 @@ public class MerchantOffer {
+         this.xp = merchantExperience;
+         this.priceMultiplier = priceMultiplier;
+         this.demand = demandBonus;
++        this.playerDiscounts = playerDiscounts;
+     }
++    // Tentacles end
+ 
+     public ItemStack getBaseCostA() {
+         return this.baseCostA;
+@@ -218,6 +241,15 @@ public class MerchantOffer {
+         nbttagcompound.putInt("specialPrice", this.specialPriceDiff);
+         nbttagcompound.putInt("demand", this.demand);
+         nbttagcompound.putBoolean("Paper.IgnoreDiscounts", this.ignoreDiscounts); // Paper
++        // Tentacles start
++        if (!this.playerDiscounts.isEmpty()) {
++            CompoundTag compound = new CompoundTag();
++            for (Map.Entry<UUID, Float> entry : this.playerDiscounts.entrySet()) {
++                compound.putFloat(entry.getKey().toString(), entry.getValue());
++            }
++            nbttagcompound.put("Tentacles.PlayerDiscounts", compound);
++        }
++        // Tentacles end
+         return nbttagcompound;
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
+index 0f038f6152c90e707cb633dffcab0a1c5b99d260..7ec1565fa8907827aaf5c648434432e0015bd27f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
+@@ -1,7 +1,9 @@
+ package org.bukkit.craftbukkit.inventory;
+ 
+ import com.google.common.base.Preconditions;
++import java.util.HashMap;
+ import java.util.List;
++import java.util.UUID;
+ import org.bukkit.Material;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.inventory.MerchantRecipe;
+@@ -29,8 +31,11 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+         this(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, false);
+     }
+     public CraftMerchantRecipe(ItemStack result, int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts) {
+-        super(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, ignoreDiscounts);
+-        // Paper end
++        // Tentacles start
++        this(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, ignoreDiscounts, null);
++    }
++    public CraftMerchantRecipe(ItemStack result , int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts, HashMap<UUID, Float> playerDiscounts) {
++        super(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, ignoreDiscounts, playerDiscounts);
+         this.handle = new net.minecraft.world.item.trading.MerchantOffer(
+                 net.minecraft.world.item.ItemStack.EMPTY,
+                 net.minecraft.world.item.ItemStack.EMPTY,
+@@ -41,11 +46,12 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+                 priceMultiplier,
+                 demand,
+                 ignoreDiscounts, // Paper - add ignoreDiscounts param
+-                this
++                playerDiscounts
+         );
+         this.setSpecialPrice(specialPrice);
+         this.setExperienceReward(experienceReward);
+     }
++    // Tentacles end
+ 
+     @Override
+     public int getSpecialPrice() {
