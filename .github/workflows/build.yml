@@ -1,7 +1,9 @@
 name: Build
 on:
+  workflow_run:
+    types: [completed]
+    workflows: [Upstream]
   workflow_dispatch:
-  workflow_call:
   push:
       branches: [ ver/1.18.2 ]
 
