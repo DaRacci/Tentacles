@@ -28,7 +28,7 @@ index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d5a86bd683cd5da4071aa966f2bbe36a
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
-index 9a402505375af2051673245ec0a1daf9f3a66dc7..2f8dc3ecd0403663e5e22fff5172571735b2e8e9 100644
+index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3d71a30f3 100644
 --- a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 +++ b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 @@ -6,6 +6,11 @@ import net.minecraft.util.Mth;
@@ -56,9 +56,9 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..2f8dc3ecd0403663e5e22fff51725717
          this.demand = nbt.getInt("demand");
          this.ignoreDiscounts = nbt.getBoolean("Paper.IgnoreDiscounts"); // Paper
 +        // Tentacles start
++        this.playerDiscounts = new HashMap<>();
 +        if (nbt.contains("Tentacles.PlayerDiscounts")) {
 +            CompoundTag compound = nbt.getCompound("Tentacles.PlayerDiscounts");
-+            this.playerDiscounts = new HashMap<>();
 +            compound.getAllKeys().forEach(key -> {
 +                UUID uuid = UUID.fromString(key);
 +                this.playerDiscounts.put(uuid, compound.getFloat(key));
@@ -88,7 +88,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..2f8dc3ecd0403663e5e22fff51725717
          this.xp = merchantExperience;
          this.priceMultiplier = priceMultiplier;
          this.demand = demandBonus;
-+        this.playerDiscounts = playerDiscounts;
++        this.playerDiscounts = playerDiscounts != null ? playerDiscounts : new HashMap<>();
      }
 +    // Tentacles end
  
