@@ -5,7 +5,7 @@ Subject: [PATCH] Player Discount API
 
 
 diff --git a/src/main/java/org/bukkit/inventory/MerchantRecipe.java b/src/main/java/org/bukkit/inventory/MerchantRecipe.java
-index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429924c67d3 100644
+index afaa21b9347683fa373a938d9b1aa01c2058192a..9a3b34afd249311243a07b2bd543e1f457545cc6 100644
 --- a/src/main/java/org/bukkit/inventory/MerchantRecipe.java
 +++ b/src/main/java/org/bukkit/inventory/MerchantRecipe.java
 @@ -2,8 +2,12 @@ package org.bukkit.inventory;
@@ -25,7 +25,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
      private int villagerExperience;
      private float priceMultiplier;
      private boolean ignoreDiscounts; // Paper
-+    private HashMap<UUID, Float> playerDiscounts; // Tentacles
++    private HashMap<UUID, Double> playerDiscounts; // Tentacles
  
      public MerchantRecipe(@NotNull ItemStack result, int maxUses) {
          this(result, 0, maxUses, false);
@@ -36,7 +36,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +        // Tentacles start
 +        this(result, uses, maxUses, experienceReward, villagerExperience, priceMultiplier, demand, specialPrice, ignoreDiscounts, null);
 +    }
-+    public MerchantRecipe(@NotNull ItemStack result, int uses, int maxUses, boolean experienceReward, int villagerExperience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts, @Nullable HashMap<UUID, Float> playerDiscounts) {
++    public MerchantRecipe(@NotNull ItemStack result, int uses, int maxUses, boolean experienceReward, int villagerExperience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts, @Nullable HashMap<UUID, Double> playerDiscounts) {
          this.ignoreDiscounts = ignoreDiscounts;
 -        // Paper end
 +        this.playerDiscounts = playerDiscounts != null ? playerDiscounts : new HashMap<>();
@@ -62,7 +62,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param uuid The UUID of the player
 +     * @return The discount for this player or global discount if the player has no specific discount.
 +     */
-+    public float getPriceMultiplier(@NotNull UUID uuid) {
++    public Double getPriceMultiplier(@NotNull UUID uuid) {
 +        return this.playerDiscounts.containsKey(uuid) ? this.playerDiscounts.get(uuid) : priceMultiplier;
 +    }
 +
@@ -71,7 +71,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param player The player
 +     * @return The discount for this player or global discount if the player has no specific discount.
 +     */
-+    public float getPriceMultiplier(@NotNull Player player) {
++    public Double getPriceMultiplier(@NotNull Player player) {
 +        return getPriceMultiplier(player.getUniqueId());
 +    }
 +
@@ -81,7 +81,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param uuid The UUID of the player
 +     * @param priceMultiplier The new price multiplier
 +     */
-+    public void setPriceMultiplier(@NotNull UUID uuid, float priceMultiplier) {
++    public void setPriceMultiplier(@NotNull UUID uuid, double priceMultiplier) {
 +        this.playerDiscounts.put(uuid, priceMultiplier);
 +    }
 +
@@ -91,7 +91,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param player The player
 +     * @param priceMultiplier The new price multiplier
 +     */
-+    public void setPriceMultiplier(@NotNull Player player, float priceMultiplier) {
++    public void setPriceMultiplier(@NotNull Player player, double priceMultiplier) {
 +        setPriceMultiplier(player.getUniqueId(), priceMultiplier);
 +    }
 +
@@ -101,7 +101,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param uuid The UUID of the player
 +     * @return The uuids previous discount or null.
 +     */
-+    public @NotNull Float removePriceMultiplier(@NotNull UUID uuid) {
++    public @NotNull Double removePriceMultiplier(@NotNull UUID uuid) {
 +        return this.playerDiscounts.remove(uuid);
 +    }
 +
@@ -111,7 +111,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..c5d8e0308f1c8e88341bc5db2e768429
 +     * @param player The player
 +     * @return The players previous discount or null.
 +     */
-+    public @NotNull Float removePriceMultiplier(@NotNull Player player) {
++    public @NotNull Double removePriceMultiplier(@NotNull Player player) {
 +        return removePriceMultiplier(player.getUniqueId());
 +    }
 +    // Tentacles end

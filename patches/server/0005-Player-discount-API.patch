@@ -5,21 +5,33 @@ Subject: [PATCH] Player discount API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d5a86bd683cd5da4071aa966f2bbe36aaf0879d3 100644
+index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d9f4044555734fb33a5d69cb5d4609aea8a83e2c 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-@@ -608,6 +608,10 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -608,9 +608,22 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
                  if (merchantrecipe.ignoreDiscounts) continue; // Paper
  
                  merchantrecipe.addToSpecialPriceDiff(-Mth.floor((float) i * merchantrecipe.getPriceMultiplier()));
-+                // Tentacles start
-+                if (merchantrecipe.playerDiscounts.containsKey(player)) {
-+                    merchantrecipe.addToSpecialPriceDiff(-Mth.floor((float) i * merchantrecipe.playerDiscounts.get(player.getUUID())));
-+                }
++                System.out.println("Special price diff: " + merchantrecipe.getSpecialPriceDiff());
              }
          }
  
-@@ -625,7 +629,6 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
++        // Tentacles start
++        for (int j = 0; j < this.getOffers().size(); ++j) {
++            MerchantOffer merchantrecipe = this.getOffers().get(j);
++            if (merchantrecipe.ignoreDiscounts || !merchantrecipe.playerDiscounts.containsKey(player.getUUID())) continue;
++
++            double discount = merchantrecipe.getBaseCostA().getCount() * merchantrecipe.playerDiscounts.get(player.getUUID());
++            System.out.println("Discount: " + discount);
++            merchantrecipe.addToSpecialPriceDiff(-Mth.floor(discount));
++            System.out.println("New Special price diff: " + merchantrecipe.getSpecialPriceDiff());
++        }
++        // Tentacles end
++
+         if (player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
+             MobEffectInstance mobeffect = player.getEffect(MobEffects.HERO_OF_THE_VILLAGE);
+             int j = mobeffect.getAmplifier();
+@@ -625,7 +638,6 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
                  merchantrecipe1.addToSpecialPriceDiff(-Math.max(k, 1));
              }
          }
@@ -28,7 +40,7 @@ index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d5a86bd683cd5da4071aa966f2bbe36a
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
-index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3d71a30f3 100644
+index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63af3ce901 100644
 --- a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 +++ b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 @@ -6,6 +6,11 @@ import net.minecraft.util.Mth;
@@ -47,7 +59,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3
      public float priceMultiplier;
      public int xp;
      public boolean ignoreDiscounts; // Paper
-+    public Map<UUID, Float> playerDiscounts; // Tentacles
++    public Map<UUID, Double> playerDiscounts; // Tentacles
      // CraftBukkit start
      private CraftMerchantRecipe bukkitHandle;
  
@@ -61,7 +73,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3
 +            CompoundTag compound = nbt.getCompound("Tentacles.PlayerDiscounts");
 +            compound.getAllKeys().forEach(key -> {
 +                UUID uuid = UUID.fromString(key);
-+                this.playerDiscounts.put(uuid, compound.getFloat(key));
++                this.playerDiscounts.put(uuid, compound.getDouble(key));
 +            });
 +        }
 +        // Tentacles ends
@@ -75,10 +87,10 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3
 -        this.ignoreDiscounts = ignoreDiscounts;
 -        // Paper end
 +        // Tentacles start
-+        this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, ignoreDiscounts, (Map<UUID, Float>) null);
++        this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, ignoreDiscounts, (Map<UUID, Double>) null);
 +    }
 +
-+    public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts, Map<UUID, Float> playerDiscounts) {
++    public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts, Map<UUID, Double> playerDiscounts) {
 +        this.ignoreDiscounts = false;
 +        // Paper start - add ignoreDiscounts param
          this.rewardExp = true;
@@ -101,8 +113,8 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3
 +        // Tentacles start
 +        if (!this.playerDiscounts.isEmpty()) {
 +            CompoundTag compound = new CompoundTag();
-+            for (Map.Entry<UUID, Float> entry : this.playerDiscounts.entrySet()) {
-+                compound.putFloat(entry.getKey().toString(), entry.getValue());
++            for (Map.Entry<UUID, Double> entry : this.playerDiscounts.entrySet()) {
++                compound.putDouble(entry.getKey().toString(), entry.getValue());
 +            }
 +            nbttagcompound.put("Tentacles.PlayerDiscounts", compound);
 +        }
@@ -111,7 +123,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..38a58ec9d65e8b550cd7da3fbfa9f6f3
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
-index 0f038f6152c90e707cb633dffcab0a1c5b99d260..7ec1565fa8907827aaf5c648434432e0015bd27f 100644
+index 0f038f6152c90e707cb633dffcab0a1c5b99d260..11ae19a9485ae310836b48c246872ca322586046 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 @@ -1,7 +1,9 @@
@@ -133,7 +145,7 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..7ec1565fa8907827aaf5c648434432e0
 +        // Tentacles start
 +        this(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, ignoreDiscounts, null);
 +    }
-+    public CraftMerchantRecipe(ItemStack result , int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts, HashMap<UUID, Float> playerDiscounts) {
++    public CraftMerchantRecipe(ItemStack result , int uses, int maxUses, boolean experienceReward, int experience, float priceMultiplier, int demand, int specialPrice, boolean ignoreDiscounts, HashMap<UUID, Double> playerDiscounts) {
 +        super(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, ignoreDiscounts, playerDiscounts);
          this.handle = new net.minecraft.world.item.trading.MerchantOffer(
                  net.minecraft.world.item.ItemStack.EMPTY,
@@ -152,3 +164,42 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..7ec1565fa8907827aaf5c648434432e0
  
      @Override
      public int getSpecialPrice() {
+@@ -129,6 +135,38 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+     }
+     // Paper end
+ 
++    // Tentacles start
++    @Override
++    public Double getPriceMultiplier(UUID uuid) {
++        return this.handle.playerDiscounts.containsKey(uuid) ? this.handle.playerDiscounts.get(uuid) : handle.priceMultiplier;
++    }
++
++    @Override
++    public Double getPriceMultiplier(org.bukkit.entity.Player player) {
++        return getPriceMultiplier(player.getUniqueId());
++    }
++
++    @Override
++    public void setPriceMultiplier(UUID uuid, double priceMultiplier) {
++        this.handle.playerDiscounts.put(uuid, priceMultiplier);
++    }
++
++    @Override
++    public void setPriceMultiplier(org.bukkit.entity.Player player, double priceMultiplier) {
++        setPriceMultiplier(player.getUniqueId(), priceMultiplier);
++    }
++
++    @Override
++    public Double removePriceMultiplier(UUID uuid) {
++        return this.handle.playerDiscounts.remove(uuid);
++    }
++
++    @Override
++    public Double removePriceMultiplier(org.bukkit.entity.Player player) {
++        return removePriceMultiplier(player.getUniqueId());
++    }
++    // Tentacles end
++
+     public net.minecraft.world.item.trading.MerchantOffer toMinecraft() {
+         List<ItemStack> ingredients = getIngredients();
+         Preconditions.checkState(!ingredients.isEmpty(), "No offered ingredients");
