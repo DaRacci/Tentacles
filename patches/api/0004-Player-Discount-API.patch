@@ -5,7 +5,7 @@ Subject: [PATCH] Player Discount API
 
 
 diff --git a/src/main/java/org/bukkit/inventory/MerchantRecipe.java b/src/main/java/org/bukkit/inventory/MerchantRecipe.java
-index afaa21b9347683fa373a938d9b1aa01c2058192a..9a3b34afd249311243a07b2bd543e1f457545cc6 100644
+index afaa21b9347683fa373a938d9b1aa01c2058192a..806b6da4d8e9d725913c4ef616e1e89c24fbda8a 100644
 --- a/src/main/java/org/bukkit/inventory/MerchantRecipe.java
 +++ b/src/main/java/org/bukkit/inventory/MerchantRecipe.java
 @@ -2,8 +2,12 @@ package org.bukkit.inventory;
@@ -62,7 +62,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..9a3b34afd249311243a07b2bd543e1f4
 +     * @param uuid The UUID of the player
 +     * @return The discount for this player or global discount if the player has no specific discount.
 +     */
-+    public Double getPriceMultiplier(@NotNull UUID uuid) {
++    public double getPriceMultiplier(@NotNull UUID uuid) {
 +        return this.playerDiscounts.containsKey(uuid) ? this.playerDiscounts.get(uuid) : priceMultiplier;
 +    }
 +
@@ -71,7 +71,7 @@ index afaa21b9347683fa373a938d9b1aa01c2058192a..9a3b34afd249311243a07b2bd543e1f4
 +     * @param player The player
 +     * @return The discount for this player or global discount if the player has no specific discount.
 +     */
-+    public Double getPriceMultiplier(@NotNull Player player) {
++    public double getPriceMultiplier(@NotNull Player player) {
 +        return getPriceMultiplier(player.getUniqueId());
 +    }
 +

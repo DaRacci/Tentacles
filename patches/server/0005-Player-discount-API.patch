@@ -123,7 +123,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
-index 0f038f6152c90e707cb633dffcab0a1c5b99d260..11ae19a9485ae310836b48c246872ca322586046 100644
+index 0f038f6152c90e707cb633dffcab0a1c5b99d260..27d7ddf2bfac63c9cdd0c863cf9adaa39d723210 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 @@ -1,7 +1,9 @@
@@ -170,12 +170,12 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..11ae19a9485ae310836b48c246872ca3
  
 +    // Tentacles start
 +    @Override
-+    public Double getPriceMultiplier(UUID uuid) {
++    public double getPriceMultiplier(UUID uuid) {
 +        return this.handle.playerDiscounts.containsKey(uuid) ? this.handle.playerDiscounts.get(uuid) : handle.priceMultiplier;
 +    }
 +
 +    @Override
-+    public Double getPriceMultiplier(org.bukkit.entity.Player player) {
++    public double getPriceMultiplier(org.bukkit.entity.Player player) {
 +        return getPriceMultiplier(player.getUniqueId());
 +    }
 +
