@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Thu, 2 Jun 2022 00:44:42 +1000
+Subject: [PATCH] Stand on fluid API
+
+
+diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
+index ea4971ecd5d751c253ebe4fc4eb9abd871122376..87efedbcfb0695a88606fbcb05f2ee91ed4897a4 100644
+--- a/src/main/java/org/bukkit/entity/LivingEntity.java
++++ b/src/main/java/org/bukkit/entity/LivingEntity.java
+@@ -964,5 +964,9 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+      * @return True if the mob can breath underwater
+      */
+     boolean canBreathUnderwater();
++
++    void addCanStandOnFluid(@NotNull org.bukkit.Fluid fluid);
++    void removeCanStandOnFluid(@NotNull org.bukkit.Fluid fluid);
++    boolean canStandOnFluid(@NotNull org.bukkit.Fluid fluid);
+     // Tentacles end
+ }

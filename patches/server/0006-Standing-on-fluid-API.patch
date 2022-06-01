@@ -1,0 +1,83 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Thu, 2 Jun 2022 00:44:24 +1000
+Subject: [PATCH] Standing on fluid API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 392868be21dc60eb3a76987a92d0aaf7f6208ad3..d3c9beb53719dfad9f20d53fb26cd8fb93b76043 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -267,6 +267,7 @@ public abstract class LivingEntity extends Entity {
+     // Tentacles start
+     @Nullable
+     public Boolean canBreathUnderwater = null;
++    public final List<Fluid> standOnFluids = new ArrayList<>();
+     // Tentacles end
+ 
+     @Override
+@@ -2721,7 +2722,7 @@ public abstract class LivingEntity extends Entity {
+     }
+ 
+     public boolean canStandOnFluid(FluidState fluid) {
+-        return false;
++        return standOnFluids.contains(fluid.getType()); // Tentacles - fluid API
+     }
+ 
+     public void travel(Vec3 movementInput) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 38bf7b825c6348c7e9b5d0ef2dee664f9fe76f88..fc8559454e40d7738898d99ee87bd16a493752c7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+ import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
+ import net.minecraft.world.entity.projectile.ThrownTrident;
+ import net.minecraft.world.level.ClipContext;
++import net.minecraft.world.level.material.FlowingFluid;
++import net.minecraft.world.level.material.Fluids;
+ import net.minecraft.world.phys.HitResult;
+ import net.minecraft.world.phys.Vec3;
+ import org.apache.commons.lang.Validate;
++import org.bukkit.Fluid;
+ import org.bukkit.FluidCollisionMode;
+ import org.bukkit.Location;
+ import org.bukkit.Material;
+@@ -83,6 +86,7 @@ import org.bukkit.potion.PotionType;
+ import org.bukkit.util.BlockIterator;
+ import org.bukkit.util.RayTraceResult;
+ import org.bukkit.util.Vector;
++import org.jetbrains.annotations.NotNull;
+ 
+ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+     private CraftEntityEquipment equipment;
+@@ -959,5 +963,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+     public boolean canBreathUnderwater() {
+         return getHandle().canBreatheUnderwater();
+     }
+-    // Tentacles end
++
++    @Override
++    public void addCanStandOnFluid(@NotNull Fluid fluid) {
++        getHandle().standOnFluids.add(convertFromBukkit(fluid));
++    }
++
++    @Override
++    public void removeCanStandOnFluid(@NotNull Fluid fluid) {
++        getHandle().standOnFluids.remove(convertFromBukkit(fluid));
++    }
++
++    @Override
++    public boolean canStandOnFluid(@NotNull Fluid fluid) {
++        return getHandle().canStandOnFluid(convertFromBukkit(fluid).defaultFluidState());
++    }
++
++    private FlowingFluid convertFromBukkit(Fluid fluid) {
++        return switch (fluid) {
++            case LAVA -> Fluids.LAVA;
++            case WATER -> Fluids.WATER;
++            case FLOWING_LAVA -> Fluids.FLOWING_LAVA;
++            case FLOWING_WATER -> Fluids.FLOWING_WATER;
++        };
++    }
++// Tentacles end
+ }
