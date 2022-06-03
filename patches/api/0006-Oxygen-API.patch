@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Fri, 3 Jun 2022 17:53:04 +1000
+Subject: [PATCH] Oxygen-API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 8d1e8795f0f1817a0f034f139ba8701449b9a48a..894c4f18565d98b06332913c937298879abdc5df 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -883,5 +883,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      * Set this to null to restore the entity type default
+      */
+     void setImmuneToFire(@Nullable Boolean fireImmune);
++
++    /**
++     * Checks if the entity has reverse oxygen
++     * @return True if gains oxygen in water and looses oxygen in air
++     */
++    boolean isReverseOxygen();
++
++    /**
++     * Sets if the entity has reverse oxygen
++     */
++    void setReverseOxygen(boolean reverseOxygen);
+     // Tentacles end
+ }

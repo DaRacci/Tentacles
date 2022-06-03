@@ -1,0 +1,101 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Fri, 3 Jun 2022 17:53:09 +1000
+Subject: [PATCH] Oxygen-API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..0fb486c7551952f0e465146e995c6e99b662e7fd 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     private UUID originWorld;
+     public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
+     public @Nullable Boolean immuneToFire = null; // Tentacles - Fire Immunity API
++    public boolean reverseOxygen; // Tentacles - Oxygen API
+ 
+     public void setOrigin(@javax.annotation.Nonnull Location location) {
+         this.origin = location.toVector();
+@@ -2199,10 +2200,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                 nbt.putBoolean("Paper.FreezeLock", true);
+             }
+             // Paper end
+-            // Tentacles start - Fire Immuntity API
++            // Tentacles start
+             if (immuneToFire != null) {
+                 nbt.putBoolean("Purpur.FireImmune", immuneToFire);
+             }
++            if (reverseOxygen) {
++                nbt.putBoolean("Tentacles.ReverseOxygen", reverseOxygen);
++            }
+             // Tentacles end
+             return nbt;
+         } catch (Throwable throwable) {
+@@ -2373,6 +2377,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+             if (nbt.contains("Purpur.FireImmune")) {
+                 immuneToFire = nbt.getBoolean("Purpur.FireImmune");
+             }
++            if (nbt.contains("Tentacles.ReverseOxygen")) {
++                reverseOxygen = nbt.getBoolean("Tentacles.ReverseOxygen");
++            }
+             // Tentacles end
+ 
+         } catch (Throwable throwable) {
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index d3c9beb53719dfad9f20d53fb26cd8fb93b76043..10d2c809d39f99058c469829a8ef5ac0cefcb66d 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -426,7 +426,15 @@ public abstract class LivingEntity extends Entity {
+                 boolean flag1 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(this) && (!flag || !((net.minecraft.world.entity.player.Player) this).getAbilities().invulnerable);
+ 
+                 if (flag1) {
+-                    this.setAirSupply(this.decreaseAirSupply(this.getAirSupply()));
++                    // Tentacles start - Oxygen API
++                    int amount;
++                    if (this.reverseOxygen) {
++                        amount = this.increaseAirSupply(this.getAirSupply());
++                    } else {
++                        amount = this.decreaseAirSupply(this.getAirSupply());
++                    }
++                    this.setAirSupply(amount);
++                    // Tentacles end
+                     if (this.getAirSupply() == -this.level.purpurConfig.drowningDamageInterval) { // Purpur
+                         this.setAirSupply(0);
+                         Vec3 vec3d = this.getDeltaMovement();
+@@ -447,7 +455,15 @@ public abstract class LivingEntity extends Entity {
+                     this.stopRiding();
+                 }
+             } else if (this.getAirSupply() < this.getMaxAirSupply()) {
+-                this.setAirSupply(this.increaseAirSupply(this.getAirSupply()));
++                // Tentacles start - Oxygen API
++                int amount;
++                if (this.reverseOxygen) {
++                    amount = this.increaseAirSupply(this.getAirSupply());
++                } else {
++                    amount = this.decreaseAirSupply(this.getAirSupply());
++                }
++                this.setAirSupply(amount);
++                // Tentacles end
+             }
+ 
+             if (!this.level.isClientSide) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 6659323439e69f5ece9091f4bdb621a68cdb959c..685e079c399e541b153f0e794ce4bc33c813db5f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1354,5 +1354,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     public void setImmuneToFire(Boolean fireImmune) {
+         getHandle().immuneToFire = fireImmune;
+     }
++
++    @Override
++    public boolean isReverseOxygen() {
++        return getHandle().reverseOxygen;
++    }
++
++    @Override
++    public void setReverseOxygen(boolean reverseOxygen) {
++        getHandle().reverseOxygen = reverseOxygen;
++    }
+     // Tentacles end
+ }
