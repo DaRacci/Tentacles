@@ -5,14 +5,14 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..0fb486c7551952f0e465146e995c6e99b662e7fd 100644
+index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..28c4451a565b6b5d30e53a537844e7353ce091f7 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      private UUID originWorld;
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public @Nullable Boolean immuneToFire = null; // Tentacles - Fire Immunity API
-+    public boolean reverseOxygen; // Tentacles - Oxygen API
++    public boolean reverseOxygen = false; // Tentacles - Oxygen API
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
@@ -26,7 +26,7 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..0fb486c7551952f0e465146e995c6e99
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
 +            if (reverseOxygen) {
-+                nbt.putBoolean("Tentacles.ReverseOxygen", reverseOxygen);
++                nbt.putBoolean("Tentacles.ReverseOxygen", true);
 +            }
              // Tentacles end
              return nbt;
