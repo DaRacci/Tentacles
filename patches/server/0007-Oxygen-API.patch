@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..28c4451a565b6b5d30e53a537844e7353ce091f7 100644
+index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c114cac959c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -16,12 +16,7 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..28c4451a565b6b5d30e53a537844e735
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -2199,10 +2200,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-                 nbt.putBoolean("Paper.FreezeLock", true);
-             }
-             // Paper end
--            // Tentacles start - Fire Immuntity API
-+            // Tentacles start
+@@ -2203,6 +2204,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (immuneToFire != null) {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
