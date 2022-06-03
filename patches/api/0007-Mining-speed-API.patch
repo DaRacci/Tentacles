@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Fri, 3 Jun 2022 20:30:49 +1000
+Subject: [PATCH] Mining speed API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 9e06d2cff73d3eed08b7e7855cd30fdad77891c3..c6b642ec93273bc71aab6d73f7125f2ff4466b03 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -2761,4 +2761,31 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      */
+     public boolean hasFlyingFallDamage();
+     // Purpur end
++
++    // Tentacles start
++
++    /**
++     * Checks if the player is able to mine at normal speed underwater
++     * @return True if the player is able to mine at normal speed underwater
++     */
++    public boolean isNormalUnderwaterMining();
++
++    /**
++     * Checks if the player is able to mine at normal speed while off the ground
++     * @return True if the player is able to mine at normal speed while off the ground
++     */
++    public boolean isNormalOffGroundMining();
++
++    /**
++     * Sets if the player is able to mine at normal speed underwater
++     * @param normalUnderwaterMining Enables normal underwater mining if true
++     */
++    public void setNormalUnderwaterMining(boolean normalUnderwaterMining);
++
++    /**
++     * Sets if the player is able to mine at normal speed while off the ground
++     * @param normalOffGroundMining Enables normal off ground mining if true
++     */
++    public void setNormalOffGroundMining(boolean normalOffGroundMining);
++    // Tentacles end
+ }
