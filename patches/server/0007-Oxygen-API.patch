@@ -37,43 +37,83 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c11
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d3c9beb53719dfad9f20d53fb26cd8fb93b76043..10d2c809d39f99058c469829a8ef5ac0cefcb66d 100644
+index d3c9beb53719dfad9f20d53fb26cd8fb93b76043..c4c74ace5416a203de6123d5910c46ee9417cd01 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -426,7 +426,15 @@ public abstract class LivingEntity extends Entity {
+@@ -426,28 +426,24 @@ public abstract class LivingEntity extends Entity {
                  boolean flag1 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(this) && (!flag || !((net.minecraft.world.entity.player.Player) this).getAbilities().invulnerable);
  
                  if (flag1) {
 -                    this.setAirSupply(this.decreaseAirSupply(this.getAirSupply()));
-+                    // Tentacles start - Oxygen API
-+                    int amount;
-+                    if (this.reverseOxygen) {
-+                        amount = this.increaseAirSupply(this.getAirSupply());
+-                    if (this.getAirSupply() == -this.level.purpurConfig.drowningDamageInterval) { // Purpur
+-                        this.setAirSupply(0);
+-                        Vec3 vec3d = this.getDeltaMovement();
+-
+-                        for (int i = 0; i < 8; ++i) {
+-                            double d2 = this.random.nextDouble() - this.random.nextDouble();
+-                            double d3 = this.random.nextDouble() - this.random.nextDouble();
+-                            double d4 = this.random.nextDouble() - this.random.nextDouble();
+-
+-                            this.level.addParticle(ParticleTypes.BUBBLE, this.getX() + d2, this.getY() + d3, this.getZ() + d4, vec3d.x, vec3d.y, vec3d.z);
+-                        }
+-
+-                        this.hurt(DamageSource.DROWN, (float) this.level.purpurConfig.damageFromDrowning); // Purpur
++                    // Tentacles start
++                    if (reverseOxygen) {
++                        this.increaseAir();
 +                    } else {
-+                        amount = this.decreaseAirSupply(this.getAirSupply());
-+                    }
-+                    this.setAirSupply(amount);
++                        this.decreaseAir();
+                     }
 +                    // Tentacles end
-                     if (this.getAirSupply() == -this.level.purpurConfig.drowningDamageInterval) { // Purpur
-                         this.setAirSupply(0);
-                         Vec3 vec3d = this.getDeltaMovement();
-@@ -447,7 +455,15 @@ public abstract class LivingEntity extends Entity {
+                 }
+ 
+                 if (!this.level.isClientSide && this.isPassenger() && this.getVehicle() != null && !this.getVehicle().rideableUnderWater()) {
                      this.stopRiding();
                  }
-             } else if (this.getAirSupply() < this.getMaxAirSupply()) {
+-            } else if (this.getAirSupply() < this.getMaxAirSupply()) {
 -                this.setAirSupply(this.increaseAirSupply(this.getAirSupply()));
-+                // Tentacles start - Oxygen API
-+                int amount;
-+                if (this.reverseOxygen) {
-+                    amount = this.increaseAirSupply(this.getAirSupply());
-+                } else {
-+                    amount = this.decreaseAirSupply(this.getAirSupply());
-+                }
-+                this.setAirSupply(amount);
++                // Tentacles start
++            } else if (reverseOxygen) {
++                this.decreaseAir();
++            } else {
++                this.increaseAir();
 +                // Tentacles end
              }
  
              if (!this.level.isClientSide) {
+@@ -507,6 +503,32 @@ public abstract class LivingEntity extends Entity {
+         this.level.getProfiler().pop();
+     }
+ 
++    // Tentacles start - Extract method
++    private void increaseAir() {
++        if (this.getAirSupply() < this.getMaxAirSupply()) {
++            this.setAirSupply(this.increaseAirSupply(this.getAirSupply()));
++        }
++    }
++
++    private void decreaseAir() {
++        this.setAirSupply(this.decreaseAirSupply(this.getAirSupply()));
++        if (this.getAirSupply() == -this.level.purpurConfig.drowningDamageInterval) { // Purpur
++            this.setAirSupply(0);
++            Vec3 vec3d = this.getDeltaMovement();
++
++            for (int i = 0; i < 8; ++i) {
++                double d2 = this.random.nextDouble() - this.random.nextDouble();
++                double d3 = this.random.nextDouble() - this.random.nextDouble();
++                double d4 = this.random.nextDouble() - this.random.nextDouble();
++
++                this.level.addParticle(ParticleTypes.BUBBLE, this.getX() + d2, this.getY() + d3, this.getZ() + d4, vec3d.x, vec3d.y, vec3d.z);
++            }
++
++            this.hurt(DamageSource.DROWN, (float) this.level.purpurConfig.damageFromDrowning); // Purpur
++        }
++    }
++    // Tentacles end
++
+     public boolean canSpawnSoulSpeedParticle() {
+         return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
+     }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index 6659323439e69f5ece9091f4bdb621a68cdb959c..685e079c399e541b153f0e794ce4bc33c813db5f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
