@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c114cac959c 100644
+index 4ba92f18091f381762ed75d79b02689b9c22a026..8a91225ebce149b4f1ecd79ebfc54cb2340bdb43 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -16,7 +16,7 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c11
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -2203,6 +2204,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2209,6 +2210,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (immuneToFire != null) {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
@@ -26,7 +26,7 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c11
              // Tentacles end
              return nbt;
          } catch (Throwable throwable) {
-@@ -2373,6 +2377,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2379,6 +2383,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (nbt.contains("Purpur.FireImmune")) {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
@@ -37,7 +37,7 @@ index fb5f1e89fce67f0183afcc5d7beeda76c0c8945b..d2e8c17110b92c0d17765f821c075c11
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d3c9beb53719dfad9f20d53fb26cd8fb93b76043..c4c74ace5416a203de6123d5910c46ee9417cd01 100644
+index 39af8d990cd95848c1d5e35700bf57ac09e7f4af..483447c6d6b0d33d65938e2766026d77a926a308 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -426,28 +426,24 @@ public abstract class LivingEntity extends Entity {

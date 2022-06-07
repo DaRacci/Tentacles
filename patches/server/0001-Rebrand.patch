@@ -105,10 +105,10 @@ index 14ed740609b14242c2a8d377a78b2f719cd8a422..f3bcf42b7e26c3261a9fe166725a7f00
          stringbuilder.append("// ");
          stringbuilder.append(CrashReport.getErrorComment());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 69917030089f29ca0b26e13b8182c966103e6cd6..12ce5ff25711271810774570afee913496e0889e 100644
+index 20cdc0eb26fd53a4193b39171982dfa255d355bf..44f79357ce44ee975a390a1090c33447a022dbe3 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -959,7 +959,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -960,7 +960,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          shutdownThread = Thread.currentThread();
          org.spigotmc.WatchdogThread.doStop(); // Paper
          if (!isSameThread()) {
@@ -131,7 +131,7 @@ index 5e9fc979daced5dad9977ab12ea019f4e6216bfb..6ca7012e748aeea2430ee4e907ab3e97
  
      private static final int DEFAULT_SIZE_THRESHOLD = 1024 * 8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 52c40bb83bae0f781432f4348c58a927cf366c9f..7acb8662d4ed372aacc3ffe3975a48ef42a17e86 100644
+index bdabc6ec495ca56848ad7b8cc7aef7e5788c7efa..6dec98c0442bf3e167bff2e1b21e4c71653c93c3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -249,7 +249,7 @@ import javax.annotation.Nullable; // Paper
