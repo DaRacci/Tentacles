@@ -5,10 +5,10 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 4ba92f18091f381762ed75d79b02689b9c22a026..8a91225ebce149b4f1ecd79ebfc54cb2340bdb43 100644
+index 684c81d692492cc0aa492b12fec26cead8821683..4946dd3dedb040e8811a68030780041570ab094b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -399,6 +399,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      private UUID originWorld;
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public @Nullable Boolean immuneToFire = null; // Tentacles - Fire Immunity API
@@ -16,7 +16,7 @@ index 4ba92f18091f381762ed75d79b02689b9c22a026..8a91225ebce149b4f1ecd79ebfc54cb2
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -2209,6 +2210,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2297,6 +2298,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (immuneToFire != null) {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
@@ -26,7 +26,7 @@ index 4ba92f18091f381762ed75d79b02689b9c22a026..8a91225ebce149b4f1ecd79ebfc54cb2
              // Tentacles end
              return nbt;
          } catch (Throwable throwable) {
-@@ -2379,6 +2383,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2467,6 +2471,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (nbt.contains("Purpur.FireImmune")) {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
@@ -37,10 +37,10 @@ index 4ba92f18091f381762ed75d79b02689b9c22a026..8a91225ebce149b4f1ecd79ebfc54cb2
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 39af8d990cd95848c1d5e35700bf57ac09e7f4af..483447c6d6b0d33d65938e2766026d77a926a308 100644
+index 0434beb0f473bc1292b9e78879ec3a0b5986b000..a5abf59f48d04985b0fe714ff96158d9215c797a 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -426,28 +426,24 @@ public abstract class LivingEntity extends Entity {
+@@ -428,28 +428,24 @@ public abstract class LivingEntity extends Entity {
                  boolean flag1 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(this) && (!flag || !((net.minecraft.world.entity.player.Player) this).getAbilities().invulnerable);
  
                  if (flag1) {
@@ -81,7 +81,7 @@ index 39af8d990cd95848c1d5e35700bf57ac09e7f4af..483447c6d6b0d33d65938e2766026d77
              }
  
              if (!this.level.isClientSide) {
-@@ -507,6 +503,32 @@ public abstract class LivingEntity extends Entity {
+@@ -509,6 +505,32 @@ public abstract class LivingEntity extends Entity {
          this.level.getProfiler().pop();
      }
  
@@ -115,10 +115,10 @@ index 39af8d990cd95848c1d5e35700bf57ac09e7f4af..483447c6d6b0d33d65938e2766026d77
          return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 6659323439e69f5ece9091f4bdb621a68cdb959c..685e079c399e541b153f0e794ce4bc33c813db5f 100644
+index 94e9ba12a357ed6010bcd404f3a6c044e7b8e340..8a22ef6065b6cf7d8c2f6f208969836fd864adc3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1354,5 +1354,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1365,5 +1365,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setImmuneToFire(Boolean fireImmune) {
          getHandle().immuneToFire = fireImmune;
      }

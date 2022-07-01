@@ -5,24 +5,24 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 50112767dff03bc3d9b3cc527e20f1b0d8df7155..9d58de3b90ae5fff8b5fa24b98327ff7013bdafe 100644
+index fd3805da1f276c76a2e814f755f6755245ec2ff4..4da58fb929f0c061f4e28f6295170d3109d5e4b9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -9,7 +9,7 @@ plugins {
  }
  
  dependencies {
--    implementation(project(":purpur-api")) // Pufferfish // Paper // Purpur
-+    implementation(project(":tentacles-api")) // Pufferfish // Paper // Purpur // Tentacles
+-    implementation(project(":purpur-api")) // Purpur
++    implementation(project(":tentacles-api")) // Purpur // Tentacles
      // Pufferfish start
-     implementation("io.papermc.paper:paper-mojangapi:1.18.2-R0.1-SNAPSHOT") {
+     implementation("io.papermc.paper:paper-mojangapi:1.19-R0.1-SNAPSHOT") {
          exclude("io.papermc.paper", "paper-api")
-@@ -82,7 +82,7 @@ tasks.jar {
+@@ -87,7 +87,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
--            "Implementation-Version" to "git-Purpur-$implementationVersion", // Pufferfish // Purpur
-+            "Implementation-Version" to "git-Tentacles-$implementationVersion", // Pufferfish // Purpur // Tentacles
+-            "Implementation-Version" to "git-Purpur-$implementationVersion",// Purpur
++            "Implementation-Version" to "git-Tentacles-$implementationVersion",// Purpur // Tentacles
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
@@ -79,7 +79,7 @@ index fba5dbdb7bcbb55400ef18342c9b54612972a718..6d9ea922228ca74e5dd752e0437d24ab
          switch (distance) {
              case -1:
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 8c3c68465197fafc14849dc38a572e309931e2a2..b479de592dfeb83250f6ed081f2e5a9d2be4c4c9 100644
+index 005fdd2e2ebc0b6f7cb06b2efdb705b9ed23a1ea..7b3db4f8e7301529596e45771b24a01a165c41f5 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 @@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
@@ -105,10 +105,10 @@ index 14ed740609b14242c2a8d377a78b2f719cd8a422..f3bcf42b7e26c3261a9fe166725a7f00
          stringbuilder.append("// ");
          stringbuilder.append(CrashReport.getErrorComment());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 20cdc0eb26fd53a4193b39171982dfa255d355bf..44f79357ce44ee975a390a1090c33447a022dbe3 100644
+index 92aed6ab9fc108835783f5314032103cbd2a6b5f..5fff8824881445c5ac24116926422be652993f74 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -960,7 +960,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -913,7 +913,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          shutdownThread = Thread.currentThread();
          org.spigotmc.WatchdogThread.doStop(); // Paper
          if (!isSameThread()) {
@@ -118,7 +118,7 @@ index 20cdc0eb26fd53a4193b39171982dfa255d355bf..44f79357ce44ee975a390a1090c33447
                  this.getRunningThread().stop();
                  try {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 5e9fc979daced5dad9977ab12ea019f4e6216bfb..6ca7012e748aeea2430ee4e907ab3e9764cc609d 100644
+index f613825c69a8d683b8029fe34503125969980341..106616cd256dfa4529d71cb4062afe2369ad886b 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -113,7 +113,7 @@ public class RegionFileStorage implements AutoCloseable {
@@ -131,20 +131,20 @@ index 5e9fc979daced5dad9977ab12ea019f4e6216bfb..6ca7012e748aeea2430ee4e907ab3e97
  
      private static final int DEFAULT_SIZE_THRESHOLD = 1024 * 8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index bdabc6ec495ca56848ad7b8cc7aef7e5788c7efa..6dec98c0442bf3e167bff2e1b21e4c71653c93c3 100644
+index a376045e94d1811645f84b3e4963726fe12545a4..0d66344165a173101532b64395d27fc849306f9c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -249,7 +249,7 @@ import javax.annotation.Nullable; // Paper
+@@ -245,7 +245,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
--    private final String serverName = "Purpur"; // Paper // Pufferfish // Purpur
-+    private final String serverName = "Tentacles"; // Paper // Pufferfish // Purpur // Tentacles
+-    private final String serverName = "Purpur"; // Paper // Purpur
++    private final String serverName = "Tentacles"; // Paper // Purpur // Tentacles
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index ca767d5a8ecb1d0c41ed149fd77eb2f49221c919..c0337de0e89b6ef5c600a4153eca6316bca156e4 100644
+index 76a4803decea19f8bed8cb11e73bd7895675a3f4..749bcdd5ac8dbe9333e74068ff577eabf3a8da29 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -808,7 +808,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
@@ -170,20 +170,20 @@ index d1526ed7197b883e1d1f07baf285bf5eef4d20d5..a9776dddb1200af74b1af503475823aa
                  // (async tasks must live with race-conditions if they attempt to cancel between these few lines of code)
              }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..02e3ffd6d87e587f9b026239f7992c4840b401a9 100644
+index fb87620c742ff7912f5e8ccd2a7930dd605576d9..ac3eb63179e66753ed68dd95e68c7553e66a6651 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
      public static String getBukkitVersion() {
          String result = "Unknown-Version";
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/dev.racci.tentacles/tentacles-api/pom.properties"); // Pufferfish // Purpur // Tentacles
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Purpur
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/dev.racci.tentacles/tentacles-api/pom.properties"); // Purpur // Tentacles
          Properties properties = new Properties();
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index c5b18b8d4ad74764fdeb5a1e21231e212e808b99..eeec56f56509d8cb98feb2dfa9819efba19c19bf 100644
+index fecfe935e09ff52a6ec582e6f2e09611adb1106f..eec7ada634594437205c058212815cd6ad424300 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 @@ -235,7 +235,7 @@ public class PurpurConfig {
@@ -196,10 +196,10 @@ index c5b18b8d4ad74764fdeb5a1e21231e212e808b99..eeec56f56509d8cb98feb2dfa9819efb
          serverModName = getString("settings.server-mod-name", serverModName);
      }
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index fc5b64da74230b4e95b7d85b22cb21e7421c575b..bb0a38e6a4fbd299e4167009aea96176d9d74110 100644
+index 4a88fbee3566ba54b615745a2e4801691f494557..d9e484788932ebac580ffb33af1e2e78baf82dfd 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
-@@ -156,14 +156,14 @@ public class WatchdogThread extends Thread
+@@ -155,14 +155,14 @@ public class WatchdogThread extends Thread
                  if (isLongTimeout) {
                  // Paper end
                  log.log( Level.SEVERE, "------------------------------" );
@@ -217,7 +217,7 @@ index fc5b64da74230b4e95b7d85b22cb21e7421c575b..bb0a38e6a4fbd299e4167009aea96176
                  //
                  if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
                  {
-@@ -186,12 +186,12 @@ public class WatchdogThread extends Thread
+@@ -185,12 +185,12 @@ public class WatchdogThread extends Thread
                  // Paper end
                  } else
                  {
@@ -232,7 +232,7 @@ index fc5b64da74230b4e95b7d85b22cb21e7421c575b..bb0a38e6a4fbd299e4167009aea96176
                  com.destroystokyo.paper.io.chunk.ChunkTaskManager.dumpAllChunkLoadInfo(); // Paper
                  this.dumpTickingInfo(); // Paper - log detailed tick information
                  WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( server.serverThread.getId(), Integer.MAX_VALUE ), log );
-@@ -207,7 +207,7 @@ public class WatchdogThread extends Thread
+@@ -206,7 +206,7 @@ public class WatchdogThread extends Thread
                      WatchdogThread.dumpThread( thread, log );
                  }
                  } else {

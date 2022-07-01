@@ -5,10 +5,10 @@ Subject: [PATCH] Mining speed API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 5b221b9026ed0a357669a0422bdff2524b5e372a..b32d9fc47b0eab4eca7c5d3b69ce78e983158612 100644
+index 7344324517fb10ee6ab3467b40fcb9cd798961cb..f8e458911535040ea58382b693601634d102e72a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -184,7 +184,10 @@ public abstract class Player extends LivingEntity {
+@@ -189,7 +189,10 @@ public abstract class Player extends LivingEntity {
      public int sixRowEnderchestSlotCount = -1; // Purpur
      public boolean flyingFallDamage = false; // Purpur
      public boolean canPortalInstant = false; // Purpur
@@ -20,7 +20,7 @@ index 5b221b9026ed0a357669a0422bdff2524b5e372a..b32d9fc47b0eab4eca7c5d3b69ce78e9
      // CraftBukkit start
      public boolean fauxSleeping;
      public int oldLevel = -1;
-@@ -866,11 +869,11 @@ public abstract class Player extends LivingEntity {
+@@ -875,11 +878,11 @@ public abstract class Player extends LivingEntity {
              f *= f1;
          }
  
@@ -35,10 +35,10 @@ index 5b221b9026ed0a357669a0422bdff2524b5e372a..b32d9fc47b0eab4eca7c5d3b69ce78e9
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index e339c0109c38fde307573af50cb3746b5c7f5848..53e0ced9fa25e21a99500b1f675107a125a2b4fc 100644
+index a43aad1317b50b5ef42a84721f82318beccd66ea..c6874b611e4595dbba69cbb79bb2406c5f847ee4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2880,4 +2880,26 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2872,4 +2872,26 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return getHandle().flyingFallDamage;
      }
      // Purpur end

@@ -5,10 +5,10 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 92154459fd46db7e9182952cc1f844298c2dcb3c..8934482bcdff71de0234a0e5af80ed2dda802273 100644
+index 411593b1b105d62440d76b7bd1b8c74b701e3e75..96fa8268527e6095ad4f8229368fa9b5489073d5 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -264,6 +264,10 @@ public abstract class LivingEntity extends Entity {
+@@ -266,6 +266,10 @@ public abstract class LivingEntity extends Entity {
      public org.bukkit.craftbukkit.entity.CraftLivingEntity getBukkitLivingEntity() { return (org.bukkit.craftbukkit.entity.CraftLivingEntity) super.getBukkitEntity(); } // Paper
      public boolean silentDeath = false; // Paper - mark entity as dying silently for cancellable death event
      protected boolean shouldBurnInDay = false;  public boolean shouldBurnInDay() { return this.shouldBurnInDay; } public void setShouldBurnInDay(boolean shouldBurnInDay) { this.shouldBurnInDay = shouldBurnInDay; } // Purpur
@@ -19,7 +19,7 @@ index 92154459fd46db7e9182952cc1f844298c2dcb3c..8934482bcdff71de0234a0e5af80ed2d
  
      @Override
      public float getBukkitYaw() {
-@@ -376,7 +380,7 @@ public abstract class LivingEntity extends Entity {
+@@ -378,7 +382,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canBreatheUnderwater() {
@@ -29,7 +29,7 @@ index 92154459fd46db7e9182952cc1f844298c2dcb3c..8934482bcdff71de0234a0e5af80ed2d
  
      public float getSwimAmount(float tickDelta) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index ca767d5a8ecb1d0c41ed149fd77eb2f49221c919..030c578c692577cb0aa26db1aa1a9cd617675755 100644
+index 749bcdd5ac8dbe9333e74068ff577eabf3a8da29..96337ab39257aef77491db310d92f3a7e6168c0e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -948,4 +948,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {

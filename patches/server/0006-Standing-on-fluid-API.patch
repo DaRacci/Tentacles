@@ -5,10 +5,10 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 392868be21dc60eb3a76987a92d0aaf7f6208ad3..d3c9beb53719dfad9f20d53fb26cd8fb93b76043 100644
+index 96fa8268527e6095ad4f8229368fa9b5489073d5..0434beb0f473bc1292b9e78879ec3a0b5986b000 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -267,6 +267,7 @@ public abstract class LivingEntity extends Entity {
+@@ -269,6 +269,7 @@ public abstract class LivingEntity extends Entity {
      // Tentacles start
      @Nullable
      public Boolean canBreathUnderwater = null;
@@ -16,17 +16,17 @@ index 392868be21dc60eb3a76987a92d0aaf7f6208ad3..d3c9beb53719dfad9f20d53fb26cd8fb
      // Tentacles end
  
      @Override
-@@ -2721,7 +2722,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2753,7 +2754,7 @@ public abstract class LivingEntity extends Entity {
      }
  
-     public boolean canStandOnFluid(FluidState fluid) {
+     public boolean canStandOnFluid(FluidState state) {
 -        return false;
-+        return standOnFluids.contains(fluid.getType()); // Tentacles - fluid API
++        return standOnFluids.contains(state.getType()); // Tentacles - fluid API
      }
  
      public void travel(Vec3 movementInput) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 38bf7b825c6348c7e9b5d0ef2dee664f9fe76f88..fc8559454e40d7738898d99ee87bd16a493752c7 100644
+index 96337ab39257aef77491db310d92f3a7e6168c0e..0d86464f04bb7bef69a7122019464fa7a487c8ee 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
