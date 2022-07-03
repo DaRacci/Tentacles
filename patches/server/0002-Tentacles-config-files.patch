@@ -355,7 +355,7 @@ index d9cc26b7935301dfa3a62eec7ec8009a96c32ff2..3ecdbb40cd57f654349067d4d041cfc5
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0d66344165a173101532b64395d27fc849306f9c..bc8dcea2576bf8cf1eb1d3cdea419e7be1b02d62 100644
+index e370289fde90259238070255dfa279ab88a896fb..a2a1f040d754fdf2bd22cb61ff6125551dc88aee 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -994,6 +994,7 @@ public final class CraftServer implements Server {
@@ -374,7 +374,7 @@ index 0d66344165a173101532b64395d27fc849306f9c..bc8dcea2576bf8cf1eb1d3cdea419e7b
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2786,6 +2788,13 @@ public final class CraftServer implements Server {
+@@ -2787,6 +2789,13 @@ public final class CraftServer implements Server {
          }
          // Purpur end
  
