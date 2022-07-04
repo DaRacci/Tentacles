@@ -105,7 +105,7 @@ index 14ed740609b14242c2a8d377a78b2f719cd8a422..f3bcf42b7e26c3261a9fe166725a7f00
          stringbuilder.append("// ");
          stringbuilder.append(CrashReport.getErrorComment());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 92aed6ab9fc108835783f5314032103cbd2a6b5f..5fff8824881445c5ac24116926422be652993f74 100644
+index 2ece154b5e7daaa3e0b128145fc5e1d452125f72..e5ab8d51eccf3f4e0e927cfb8161ad3eac41aee2 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -913,7 +913,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -131,10 +131,10 @@ index f613825c69a8d683b8029fe34503125969980341..106616cd256dfa4529d71cb4062afe23
  
      private static final int DEFAULT_SIZE_THRESHOLD = 1024 * 8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a376045e94d1811645f84b3e4963726fe12545a4..0d66344165a173101532b64395d27fc849306f9c 100644
+index 7208236ee3c604620fd0d0afe49215320e45e24b..5b8fdd4906ee43352da7f4ec66cadef13902f050 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -245,7 +245,7 @@ import javax.annotation.Nullable; // Paper
+@@ -246,7 +246,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -183,7 +183,7 @@ index fb87620c742ff7912f5e8ccd2a7930dd605576d9..ac3eb63179e66753ed68dd95e68c7553
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index fecfe935e09ff52a6ec582e6f2e09611adb1106f..eec7ada634594437205c058212815cd6ad424300 100644
+index 3bed3b7d7f35833b4d2d58ffb6900c707deb7c9b..93c7a029d1a325a5da47eb470bd2ad50faaa8924 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 @@ -235,7 +235,7 @@ public class PurpurConfig {

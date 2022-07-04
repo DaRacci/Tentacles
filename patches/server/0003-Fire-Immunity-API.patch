@@ -5,10 +5,10 @@ Subject: [PATCH] Fire Immunity API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..684c81d692492cc0aa492b12fec26cead8821683 100644
+index 3d4d3ec099a37458d43a0500724eec7594097a41..e5f37ae3c335f1cde3edb6bbab8cf29685495db3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -398,6 +398,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -399,6 +399,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      @javax.annotation.Nullable
      private UUID originWorld;
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
@@ -16,7 +16,7 @@ index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..684c81d692492cc0aa492b12fec26cea
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -1654,7 +1655,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1655,7 +1656,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      }
  
      public boolean fireImmune() {
@@ -25,7 +25,7 @@ index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..684c81d692492cc0aa492b12fec26cea
      }
  
      public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
-@@ -2292,6 +2293,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2293,6 +2294,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Paper.FreezeLock", true);
              }
              // Paper end
@@ -37,7 +37,7 @@ index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..684c81d692492cc0aa492b12fec26cea
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2457,6 +2463,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2458,6 +2464,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  freezeLocked = nbt.getBoolean("Paper.FreezeLock");
              }
              // Paper end
@@ -50,7 +50,7 @@ index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..684c81d692492cc0aa492b12fec26cea
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index e24261f2ddc3de614feb9ae38e7e04c57ea7364b..94e9ba12a357ed6010bcd404f3a6c044e7b8e340 100644
+index df3ea1aa8c4cfc9ed575e264d4eb851ae9f5b615..07936c9625dceb01809a531fbf4749f386017b81 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1354,4 +1354,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
