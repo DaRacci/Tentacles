@@ -32,8 +32,8 @@ jobs:
             patches:
               - 'patches/**'
 
-      - name: Call build workflow
-        if: ${{ steps.changes.outputs.patches == 'true' }}
-        uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19
-        with:
-          publish: 'true'
+  callworkflow:
+    if: ${{ steps.changes.outputs.patches == 'true' }}
+    uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19
+    with:
+      publish: 'true'
