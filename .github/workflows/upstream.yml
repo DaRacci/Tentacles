@@ -26,11 +26,11 @@ jobs:
           branch: ${{ github.ref }}
 
       - uses: dorny/paths-filter@v2
-          id: changes
-          with:
-            filters: |
-              patches:
-                - 'patches/**'
+        id: changes
+        with:
+          filters: |
+            patches:
+              - 'patches/**'
 
       - name: Call build workflow
         if: ${{ steps.changes.outputs.patches == 'true' }}
