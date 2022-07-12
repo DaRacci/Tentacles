@@ -35,7 +35,8 @@ jobs:
               - 'patches/**'
 
   callworkflow:
-    if: ${{ steps.changes.outputs.patches == 'true' }}
+    needs: upstream
+    if: ${{ upstream.jobs.outputs.patches == 'true' }}
     uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19
     with:
       publish: 'true'
