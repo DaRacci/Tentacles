@@ -5,6 +5,8 @@ on:
 jobs:
   upstream:
     runs-on: ubuntu-latest
+    outputs:
+      patches: ${{ steps.changes.outputs.patches }}
     steps:
       - uses: actions/checkout@v3
         with:
