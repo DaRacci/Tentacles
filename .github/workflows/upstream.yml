@@ -2,6 +2,7 @@ name: Upstream
 on:
   schedule:
     - cron: "0 */1 * * *"
+
 jobs:
   upstream:
     runs-on: ubuntu-latest
@@ -11,6 +12,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          
+      - run: git log --before `date --iso-8601`T00:00:00 -n 1 --pretty=format:"%h"
+      
       - uses: gradle/wrapper-validation-action@v1.0.4
       - uses: actions/setup-java@v3
         with:
@@ -30,6 +34,7 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: changes
         with:
+          base: ${{ github.ref }}
           filters: |
             patches:
               - 'patches/**'
