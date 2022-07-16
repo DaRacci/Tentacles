@@ -1,8 +1,8 @@
 name: Build
 on:
-  workflow_run:
-    types: [completed]
-    workflows: [Upstream]
+  #workflow_run:
+  #  types: [completed]
+  #  workflows: [Upstream]
   workflow_dispatch:
     inputs:
       publish:
@@ -11,8 +11,8 @@ on:
         default: 'false'
         type: choice
         options:
-          - true
-          - false
+          - 'true'
+          - 'false'
   workflow_call:
     inputs:
       publish:
