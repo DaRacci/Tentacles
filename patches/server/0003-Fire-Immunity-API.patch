@@ -5,7 +5,7 @@ Subject: [PATCH] Fire Immunity API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3d4d3ec099a37458d43a0500724eec7594097a41..e5f37ae3c335f1cde3edb6bbab8cf29685495db3 100644
+index 553154e47a50615109ee70568c38dc1979d9ce98..c9d16efb37d96730c891498ec216cf9ba9c3c4f6 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -399,6 +399,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -50,10 +50,10 @@ index 3d4d3ec099a37458d43a0500724eec7594097a41..e5f37ae3c335f1cde3edb6bbab8cf296
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index df3ea1aa8c4cfc9ed575e264d4eb851ae9f5b615..07936c9625dceb01809a531fbf4749f386017b81 100644
+index 061d24461782e2ab76c3406f77a33f9f508f02cb..4cd4c0b89090c12e409fcdb3f7757bea74071417 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1354,4 +1354,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1372,4 +1372,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return getHandle().rideableUnderWater();
      }
      // Purpur end

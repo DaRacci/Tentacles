@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e5f37ae3c335f1cde3edb6bbab8cf29685495db3..f0b9c728be684a76b0793a93e5cc352d1e786e14 100644
+index c9d16efb37d96730c891498ec216cf9ba9c3c4f6..92347a4a5b8f10009a32da26646c78ab508ef9c5 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -400,6 +400,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -37,7 +37,7 @@ index e5f37ae3c335f1cde3edb6bbab8cf29685495db3..f0b9c728be684a76b0793a93e5cc352d
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 0434beb0f473bc1292b9e78879ec3a0b5986b000..a5abf59f48d04985b0fe714ff96158d9215c797a 100644
+index 3aa614e5d059a69e194933eec4ae1f3b1efb73e1..93301a26906c32ef652eb144e562db0ec1b8d721 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -428,28 +428,24 @@ public abstract class LivingEntity extends Entity {
@@ -82,7 +82,7 @@ index 0434beb0f473bc1292b9e78879ec3a0b5986b000..a5abf59f48d04985b0fe714ff96158d9
  
              if (!this.level.isClientSide) {
 @@ -509,6 +505,32 @@ public abstract class LivingEntity extends Entity {
-         this.level.getProfiler().pop();
+         //this.level.getProfiler().pop(); // Purpur
      }
  
 +    // Tentacles start - Extract method
@@ -115,10 +115,10 @@ index 0434beb0f473bc1292b9e78879ec3a0b5986b000..a5abf59f48d04985b0fe714ff96158d9
          return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 07936c9625dceb01809a531fbf4749f386017b81..db11fb0770a69de44eb120a286b8fa10cb1876c0 100644
+index 4cd4c0b89090c12e409fcdb3f7757bea74071417..e00ee14fda89a2befbea90e053c2d46ff2ce48ec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1365,5 +1365,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1383,5 +1383,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setImmuneToFire(Boolean fireImmune) {
          getHandle().immuneToFire = fireImmune;
      }

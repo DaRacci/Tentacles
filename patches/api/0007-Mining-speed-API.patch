@@ -5,10 +5,10 @@ Subject: [PATCH] Mining speed API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 2436ece75493dc05352dfa0027b98aaeaab0d5f7..02b99933e722950b422f2cf72fb642a7f0bc9f70 100644
+index 8bf04a0ad920fa580568713b243c20c448435908..7ca01833df4c9cac39074f66b0ac50e9b7beccf4 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2768,4 +2768,31 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2833,4 +2833,31 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
      public boolean hasFlyingFallDamage();
      // Purpur end

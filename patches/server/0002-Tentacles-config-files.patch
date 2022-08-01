@@ -160,7 +160,7 @@ index 0000000000000000000000000000000000000000..838eb966428a8a44c4fc5f46d1a81a0b
 +}
 diff --git a/src/main/java/dev/racci/TentaclesWorldConfig.java b/src/main/java/dev/racci/TentaclesWorldConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6434fd681bb02743dc567ac59c981bcb7988baa5
+index 0000000000000000000000000000000000000000..adb8e7139128e891f92c20ce0a066fb90a34051e
 --- /dev/null
 +++ b/src/main/java/dev/racci/TentaclesWorldConfig.java
 @@ -0,0 +1,77 @@
@@ -186,7 +186,7 @@ index 0000000000000000000000000000000000000000..6434fd681bb02743dc567ac59c981bcb
 +    }
 +
 +    public void init() {
-+        log("-------- World Settings For [" + worldName + "] --------");
++        TentaclesConfig.log("-------- World Settings For [" + worldName + "] --------");
 +        TentaclesConfig.readConfig(TentaclesWorldConfig.class, this);
 +    }
 +
@@ -243,19 +243,19 @@ index 0000000000000000000000000000000000000000..6434fd681bb02743dc567ac59c981bcb
 +}
 diff --git a/src/main/java/dev/racci/command/TentaclesCommand.java b/src/main/java/dev/racci/command/TentaclesCommand.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..39135838f83391477905a785217192c4ffd1ec44
+index 0000000000000000000000000000000000000000..240d61b50775bac977a1cd6cd3a8f7830f346b6a
 --- /dev/null
 +++ b/src/main/java/dev/racci/command/TentaclesCommand.java
 @@ -0,0 +1,66 @@
 +package dev.racci.command;
 +
++import dev.racci.TentaclesConfig;
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraft.server.level.ServerLevel;
 +import org.bukkit.ChatColor;
 +import org.bukkit.Location;
 +import org.bukkit.command.Command;
 +import org.bukkit.command.CommandSender;
-+import dev.racci.TentaclesConfig;
 +
 +import java.io.File;
 +import java.util.Collections;
@@ -291,8 +291,8 @@ index 0000000000000000000000000000000000000000..39135838f83391477905a785217192c4
 +        }
 +
 +        if (args[0].equalsIgnoreCase("reload")) {
-+            Command.broadcastCommandMessage(sender, ChatColor.RED + "Please note that this command is not supported and may cause issues.");
-+            Command.broadcastCommandMessage(sender, ChatColor.RED + "If you encounter any issues please use the /stop command to restart your server.");
++            broadcastCommandMessage(sender, ChatColor.RED + "Please note that this command is not supported and may cause issues.");
++            broadcastCommandMessage(sender, ChatColor.RED + "If you encounter any issues please use the /stop command to restart your server.");
 +
 +            MinecraftServer console = MinecraftServer.getServer();
 +            TentaclesConfig.init((File) console.options.valueOf("tentacles-settings"));
@@ -302,7 +302,7 @@ index 0000000000000000000000000000000000000000..39135838f83391477905a785217192c4
 +            }
 +            console.server.reloadCount++;
 +
-+            Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Tentacles config reload complete.");
++            broadcastCommandMessage(sender, ChatColor.GREEN + "Tentacles config reload complete.");
 +        } else if (args[0].equalsIgnoreCase("version")) {
 +            Command verCmd = org.bukkit.Bukkit.getServer().getCommandMap().getCommand("version");
 +            if (verCmd != null) {
@@ -314,7 +314,7 @@ index 0000000000000000000000000000000000000000..39135838f83391477905a785217192c4
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 4487138c167b7861406a626ad99b64486eae5aea..8b2e5e1b013e4ab427149a02b824618fcc29c3bf 100644
+index 13b0f7fb6bc2d8c1fc23e71d7bb2cc86b6efa1ef..56052e94d88120574a9faaece3504314ad5a5be9 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -232,6 +232,15 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -334,11 +334,11 @@ index 4487138c167b7861406a626ad99b64486eae5aea..8b2e5e1b013e4ab427149a02b824618f
          io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // init PaperBrigadierProvider
          // Paper end
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index d9cc26b7935301dfa3a62eec7ec8009a96c32ff2..3ecdbb40cd57f654349067d4d041cfc5eaefa7ec 100644
+index ee54cbdaecbdd285fe3f74f902f01f964b569521..87e4d95b24cb45d567688f68a78b7a129f2396ef 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -177,6 +177,8 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
- 
+@@ -176,6 +176,8 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+     public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
      public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur
  
 +    public final dev.racci.TentaclesWorldConfig tentaclesConfig; // Purpur
@@ -346,7 +346,7 @@ index d9cc26b7935301dfa3a62eec7ec8009a96c32ff2..3ecdbb40cd57f654349067d4d041cfc5
      public final co.aikar.timings.WorldTimingsHandler timings; // Paper
      public static BlockPos lastPhysicsProblem; // Spigot
      private org.spigotmc.TickLimiter entityLimiter;
-@@ -332,6 +334,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -331,6 +333,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper
          this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Purpur
@@ -355,7 +355,7 @@ index d9cc26b7935301dfa3a62eec7ec8009a96c32ff2..3ecdbb40cd57f654349067d4d041cfc5
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5b8fdd4906ee43352da7f4ec66cadef13902f050..b61d10b0f69f487a86b0686934765d38a6eaaa9b 100644
+index fb7fb0b4bc28723b3ffb3748ea02eeabd4af774f..f25d6bff1a7d59f74b5767869300d8fc6b3685e1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -991,6 +991,7 @@ public final class CraftServer implements Server {
