@@ -66,12 +66,13 @@ paperweight {
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
-    useStandardUpstream("purpur") {
-        url.set(github("PurpurMC", "Purpur"))
-        ref.set(providers.gradleProperty("purpurCommit"))
+    useStandardUpstream("petal") {
+        url.set(github("Bloom-host", "Petal"))
+        ref.set(providers.gradleProperty("petalCommit"))
 
         withStandardPatcher {
-            baseName("Purpur")
+            apiSourceDirPath.set("petal-api")
+            serverSourceDirPath.set("petal-server")
 
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             apiOutputDir.set(layout.projectDirectory.dir("Tentacles-API"))
@@ -91,7 +92,7 @@ tasks.generateDevelopmentBundle {
             "https://libraries.minecraft.net/",
             "https://papermc.io/repo/repository/maven-public/",
             "https://maven.quiltmc.org/repository/release/",
-            "https://repo.purpurmc.org/snapshots",
+            "https://repo.purpurmc.org/snapshots"
         )
     )
 }

@@ -5,7 +5,7 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 96fa8268527e6095ad4f8229368fa9b5489073d5..0434beb0f473bc1292b9e78879ec3a0b5986b000 100644
+index 042b55a6a3d4e5dde7deea0cb30193bbf4e0cdd7..c304a3a1fc2feaf2a3ada1330ea79e6fd95e2f01 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -269,6 +269,7 @@ public abstract class LivingEntity extends Entity {
@@ -16,7 +16,7 @@ index 96fa8268527e6095ad4f8229368fa9b5489073d5..0434beb0f473bc1292b9e78879ec3a0b
      // Tentacles end
  
      @Override
-@@ -2753,7 +2754,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2755,7 +2756,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canStandOnFluid(FluidState state) {

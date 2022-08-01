@@ -6,11 +6,11 @@
 set -e
 PS1="$"
 
-current=$(cat gradle.properties | grep purpurCommit | sed 's/purpurCommit = //')
-upstream=$(git ls-remote https://github.com/PurpurMC/Purpur | grep ver/1.19 | cut -f 1)
+current=$(cat gradle.properties | grep petalCommit | sed 's/petalCommit = //')
+upstream=$(git ls-remote https://github.com/Bloom-host/Petal | grep ver/1.19.1 | cut -f 1)
 
 if [ "$current" != "$upstream" ]; then
-    sed -i 's/purpurCommit = .*/purpurCommit = '"$upstream"'/' gradle.properties
+    sed -i 's/PetalCommit = .*/petalCommit = '"$upstream"'/' gradle.properties
     {
       ./gradlew applyPatches --stacktrace && ./gradlew build --stacktrace && ./gradlew rebuildPatches --stacktrace
     } || exit

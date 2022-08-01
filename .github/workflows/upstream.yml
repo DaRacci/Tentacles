@@ -12,9 +12,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
-      - run: git log --before `date --iso-8601`T00:00:00 -n 1 --pretty=format:"%h"
-      
+
       - uses: gradle/wrapper-validation-action@v1.0.4
       - uses: actions/setup-java@v3
         with:
@@ -42,6 +40,6 @@ jobs:
   callworkflow:
     needs: upstream
     if: ${{ needs.upstream.outputs.patches == 'true' }}
-    uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19
+    uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19.1
     with:
       publish: 'true'
