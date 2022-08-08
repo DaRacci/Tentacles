@@ -5,15 +5,15 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 92842974ebdaeb4f44fd3966088920d4539edd35..d8d70f2e833deb02bedf148df3590aa640f83761 100644
+index fd3805da1f276c76a2e814f755f6755245ec2ff4..4da58fb929f0c061f4e28f6295170d3109d5e4b9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -9,7 +9,7 @@ plugins {
  }
  
  dependencies {
--    implementation(project(":petal-api")) // Purpur // petal
-+    implementation(project(":tentacles-api")) // Purpur // petal // Tentacles
+-    implementation(project(":purpur-api")) // Purpur
++    implementation(project(":tentacles-api")) // Purpur // Tentacles
      // Pufferfish start
      implementation("io.papermc.paper:paper-mojangapi:1.19-R0.1-SNAPSHOT") {
          exclude("io.papermc.paper", "paper-api")
@@ -21,13 +21,13 @@ index 92842974ebdaeb4f44fd3966088920d4539edd35..d8d70f2e833deb02bedf148df3590aa6
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
--            "Implementation-Version" to "git-petal-$implementationVersion",// Purpur // petal
-+            "Implementation-Version" to "git-Tentacles-$implementationVersion",// Purpur // petal // Tentacles
+-            "Implementation-Version" to "git-Purpur-$implementationVersion",// Purpur
++            "Implementation-Version" to "git-Tentacles-$implementationVersion",// Purpur // Tentacles
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 3f9aa4292ff45c6b6af0ddfeecb645f813ec5eca..11f6569529657ccf2eeb17894ab38e0749f9e64b 100644
+index fba5dbdb7bcbb55400ef18342c9b54612972a718..5479fb9138ace1dd264cd1b3a54e77e7b47dd463 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
@@ -43,22 +43,22 @@ index 3f9aa4292ff45c6b6af0ddfeecb645f813ec5eca..11f6569529657ccf2eeb17894ab38e07
      @Nonnull
      @Override
      public Component getVersionMessage(@Nonnull String serverVersion) {
--        String[] parts = serverVersion.substring("git-petal-".length()).split("[-\\s]"); // Purpur // petal
--        final Component updateMessage = getUpdateStatusMessage("Bloom-host/petal", "ver/" + getMinecraftVersion(), parts[0]); // Purpur // petal
-+        String[] parts = serverVersion.substring("git-Tentacles-".length()).split("[-\\s]"); // Purpur // petal // Tentacles
-+        final Component updateMessage = getUpdateStatusMessage("DaRacci/Tentacles", "ver/" + getMinecraftVersion(), parts[0]); // Purpur // petal // Tentacles
+-        String[] parts = serverVersion.substring("git-Purpur-".length()).split("[-\\s]"); // Purpur
+-        final Component updateMessage = getUpdateStatusMessage("PurpurMC/Purpur", "ver/" + getMinecraftVersion(), parts[0]); // Purpur
++        String[] parts = serverVersion.substring("git-Tentacles-".length()).split("[-\\s]"); // Purpur // Tentacles
++        final Component updateMessage = getUpdateStatusMessage("DaRacci/Tentacles", "ver/" + getMinecraftVersion(), parts[0]); // Purpur // Tentacles
          final Component history = getHistory();
  
          return history != null ? Component.join(net.kyori.adventure.text.JoinConfiguration.separator(Component.newline()), history, updateMessage) : updateMessage; // Purpur
-@@ -48,7 +48,7 @@ public class PaperVersionFetcher implements VersionFetcher {
+@@ -47,7 +47,7 @@ public class PaperVersionFetcher implements VersionFetcher {
+                 String result = matcher.group();
                  mcVer = result.substring(0, result.length() - 2); // strip 'R' anchor and trailing '-'
              } else {
-                 org.bukkit.Bukkit.getLogger().warning("Unable to match version to pattern! Report to Purpur!"); // Purpur
--                org.bukkit.Bukkit.getLogger().warning("Pattern: " + VER_PATTERN.toString());
-+                org.bukkit.Bukkit.getLogger().warning("Pattern: " + VER_PATTERN);
+-                org.bukkit.Bukkit.getLogger().warning("Unable to match version to pattern! Report to Purpur!"); // Purpur
++                org.bukkit.Bukkit.getLogger().warning("Unable to match version to pattern! Report to Racci!"); // Purpur // Tentacles
+                 org.bukkit.Bukkit.getLogger().warning("Pattern: " + VER_PATTERN.toString());
                  org.bukkit.Bukkit.getLogger().warning("Version: " + org.bukkit.Bukkit.getBukkitVersion());
              }
-         }
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 index 005fdd2e2ebc0b6f7cb06b2efdb705b9ed23a1ea..7b3db4f8e7301529596e45771b24a01a165c41f5 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
@@ -86,15 +86,15 @@ index b5b6657e52e4f7a630229bd3ba433438af293e22..43b9988c975f2f51ac9c56cb8198598c
          stringbuilder.append("// ");
          stringbuilder.append(CrashReport.getErrorComment());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index ba6e40eeea7a19c616bdef8905ef7fa59bf0320a..587d4b34b9f2e54c6f8b5f733c2a2fde33f2b652 100644
+index b6d5c5df02ff2dde7ac7846e9494248c1397b9f2..c20a58dbcb6f70253a6f4a2e110b5424cbf5a70a 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -916,7 +916,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          shutdownThread = Thread.currentThread();
          org.spigotmc.WatchdogThread.doStop(); // Paper
          if (!isSameThread()) {
--            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PETAL)"); // Purpur // petal
-+            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO RACCI)"); // Purpur // petal // Tentacles
+-            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PURPUR)"); // Purpur
++            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO RACCI)"); // Purpur // Tentacles
              while (this.getRunningThread().isAlive()) {
                  this.getRunningThread().stop();
                  try {
@@ -112,34 +112,18 @@ index f613825c69a8d683b8029fe34503125969980341..106616cd256dfa4529d71cb4062afe23
  
      private static final int DEFAULT_SIZE_THRESHOLD = 1024 * 8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 32cf406d1b0675b2863597f5202e728078f9b6e4..e9aec8304c7ea0977c04a3967dca87c0898e1e38 100644
+index 000007e77e73153d3d634a3ab5882916bd8b43a3..ab95f851077789eb52689e8063cc553a2066ded5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -246,7 +246,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
--    private final String serverName = "petal"; // Paper // Purpur // petal
-+    private final String serverName = "Tentacles"; // Paper // Purpur // petal // Tentacles
+-    private final String serverName = "Purpur"; // Paper // Purpur
++    private final String serverName = "Tentacles"; // Paper // Purpur // Tentacles
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
-diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java.rej b/src/main/java/org/bukkit/craftbukkit/CraftServer.java.rej
-new file mode 100644
-index 0000000000000000000000000000000000000000..ff3260767d6a7dc8da4df92d320d44e4d1de16a8
---- /dev/null
-+++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java.rej
-@@ -0,0 +1,10 @@
-+diff a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java	(rejected hunks)
-+@@ -246,7 +246,7 @@ import javax.annotation.Nullable; // Paper
-+ import javax.annotation.Nonnull; // Paper
-+ 
-+ public final class CraftServer implements Server {
-+-    private final String serverName = "Purpur"; // Paper // Purpur
-++    private final String serverName = "Tentacles"; // Paper // Purpur // Tentacles
-+     private final String serverVersion;
-+     private final String bukkitVersion = Versioning.getBukkitVersion();
-+     private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 index 76a4803decea19f8bed8cb11e73bd7895675a3f4..749bcdd5ac8dbe9333e74068ff577eabf3a8da29 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
@@ -167,15 +151,15 @@ index 5402098dce0d64d3dceea51f248d7d366850a74f..9b9d0a5be9586663958502835160e464
                  // (async tasks must live with race-conditions if they attempt to cancel between these few lines of code)
              }
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 8c0215954360adf6c51bd71994273e8b6b8e07a3..7aa4ee2e39d2f1aef2ae32e41e40ec11678e2288 100644
+index fb87620c742ff7912f5e8ccd2a7930dd605576d9..ac3eb63179e66753ed68dd95e68c7553e66a6651 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
      public static String getBukkitVersion() {
          String result = "Unknown-Version";
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/host.bloom.petal/petal-api/pom.properties"); // Purpur // petal
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/dev.racci.tentacles/tentacles-api/pom.properties"); // Purpur // petal // Tentacles
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Purpur
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/dev.racci.tentacles/tentacles-api/pom.properties"); // Purpur // Tentacles
          Properties properties = new Properties();
  
          if (stream != null) {
@@ -193,24 +177,24 @@ index d44b8ce90db7c6c27f71aa841d6fb64b159b7b42..639828fa84c46b5e8f38cf51ac8c0f4b
          serverModName = getString("settings.server-mod-name", serverModName);
      }
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index d89aecd421b83d539d29fd5e87c1bf9a992ab2dc..2a844eceaf13df21f8258dd89f8c5d62a4dddf22 100644
+index 4a88fbee3566ba54b615745a2e4801691f494557..7cf6b7d404eb4460164548c10c4cbb044954bf34 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -155,14 +155,14 @@ public class WatchdogThread extends Thread
                  if (isLongTimeout) {
                  // Paper end
                  log.log( Level.SEVERE, "------------------------------" );
--                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a petal bug." ); // Paper // Purpur // petal
-+                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a tentacles bug." ); // Paper // Purpur // petal // Tentacles
+-                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Purpur bug." ); // Paper // Purpur
++                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Tentacles bug." ); // Paper // Purpur // Tentacles
                  log.log( Level.SEVERE, "If you see a plugin in the Server thread dump below, then please report it to that author" );
                  log.log( Level.SEVERE, "\t *Especially* if it looks like HTTP or MySQL operations are occurring" );
                  log.log( Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once" );
                  log.log( Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes" );
--                log.log( Level.SEVERE, "If you are unsure or still think this is a petal bug, please report this to https://github.com/Bloom-host/petal/issues" ); // Purpur // petal
-+                log.log( Level.SEVERE, "If you are unsure or still think this is a tentacles bug, please report this to https://github.com/DaRacci/Tentacles/issues" ); // Purpur // petal // Tentacles
+-                log.log( Level.SEVERE, "If you are unsure or still think this is a Purpur bug, please report this to https://github.com/PurpurMC/Purpur/issues" ); // Purpur
++                log.log( Level.SEVERE, "If you are unsure or still think this is a Tentacles bug, please report this to https://github.com/DaRacci/Tentacles/issues" ); // Purpur // Tentacles
                  log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
--                log.log( Level.SEVERE, "petal version: " + Bukkit.getServer().getVersion() ); // Purpur // petal
-+                log.log( Level.SEVERE, "Tentacles version: " + Bukkit.getServer().getVersion() ); // Purpur // petal
+-                log.log( Level.SEVERE, "Purpur version: " + Bukkit.getServer().getVersion() ); // Purpur
++                log.log( Level.SEVERE, "Tentacles version: " + Bukkit.getServer().getVersion() ); // Purpur // Tentacles
                  //
                  if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
                  {
@@ -218,14 +202,14 @@ index d89aecd421b83d539d29fd5e87c1bf9a992ab2dc..2a844eceaf13df21f8258dd89f8c5d62
                  // Paper end
                  } else
                  {
--                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PETAL - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // petal
-+                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO RACCI - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // petal // Tentacles
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO RACCI - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // Tentacles
                      log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
                  }
                  // Paper end - Different message for short timeout
                  log.log( Level.SEVERE, "------------------------------" );
--                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to petal!):" ); // Paper // Purpur // petal
-+                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Racci!):" ); // Paper // Purpur // petal // Tentacles
+-                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur
++                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Racci!):" ); // Paper // Purpur // Tentacles
                  com.destroystokyo.paper.io.chunk.ChunkTaskManager.dumpAllChunkLoadInfo(); // Paper
                  this.dumpTickingInfo(); // Paper - log detailed tick information
                  WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( server.serverThread.getId(), Integer.MAX_VALUE ), log );
@@ -233,8 +217,8 @@ index d89aecd421b83d539d29fd5e87c1bf9a992ab2dc..2a844eceaf13df21f8258dd89f8c5d62
                      WatchdogThread.dumpThread( thread, log );
                  }
                  } else {
--                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PETAL - THIS IS NOT A BUG OR A CRASH ---"); // Purpur // petal
-+                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO RACCI - THIS IS NOT A BUG OR A CRASH ---"); // Purpur // petal // Tentacles
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH ---"); // Purpur
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO RACCI - THIS IS NOT A BUG OR A CRASH ---"); // Purpur // Tentacles
                  }
  
                  log.log( Level.SEVERE, "------------------------------" );

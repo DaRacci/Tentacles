@@ -9,12 +9,12 @@
 set -e
 PS1="$"
 
-petal=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Bloom-host/Petal/compare/$1...HEAD | jq -r '.commits[] | "Bloom-host/Petal@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
+petal=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/PurpurMC/Purpur/compare/$1...HEAD | jq -r '.commits[] | "PurpurMC/Purpur@\(.sha[:7]) \(.commit.message | split("\r\n")[0] | split("\n")[0])"')
 
 updated=""
 logsuffix=""
 if [ ! -z "$petal" ]; then
-    logsuffix="$logsuffix\n\nPetal Changes:\n$petal"
+    logsuffix="$logsuffix\n\nPurpur Changes:\n$petal"
     updated="Petal"
 fi
 disclaimer="Upstream has released updates that appear to apply and compile correctly"

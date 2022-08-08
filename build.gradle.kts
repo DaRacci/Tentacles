@@ -67,12 +67,12 @@ paperweight {
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
     useStandardUpstream("petal") {
-        url.set(github("Bloom-host", "Petal"))
-        ref.set(providers.gradleProperty("petalCommit"))
+        url.set(github("PurpurMC", "Purpur"))
+        ref.set(providers.gradleProperty("purpurCommit"))
 
         withStandardPatcher {
-            apiSourceDirPath.set("petal-api")
-            serverSourceDirPath.set("petal-server")
+            apiSourceDirPath.set("Purpur-API")
+            serverSourceDirPath.set("Purpur-Server")
 
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             apiOutputDir.set(layout.projectDirectory.dir("Tentacles-API"))

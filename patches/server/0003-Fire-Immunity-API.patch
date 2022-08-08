@@ -50,10 +50,10 @@ index ab3f5d8df443f1f23f4cf11af46ed4c95ff30f0e..4dbedb5192983dfa42c3de6ec7b754ed
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 061d24461782e2ab76c3406f77a33f9f508f02cb..4cd4c0b89090c12e409fcdb3f7757bea74071417 100644
+index be5cadf73ca4e2a2aa490e77ab7747ec8647a2ef..2fc7fb7c907b8e05b66bdd834e5191bc10ec6d4b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1372,4 +1372,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1387,4 +1387,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return getHandle().rideableUnderWater();
      }
      // Purpur end

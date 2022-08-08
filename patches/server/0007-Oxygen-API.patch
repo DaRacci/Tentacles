@@ -37,7 +37,7 @@ index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..fe7db4fab5355ad8fcec69f07c6deba3
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index c304a3a1fc2feaf2a3ada1330ea79e6fd95e2f01..7768b5169a77be3b50464c9ffa246fd1de2cd282 100644
+index 97af52d449ff2e7b0ca7744db5efb32979abce9c..757d610913a5e22173f36c5214d4a6f3108f3d3f 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -428,28 +428,24 @@ public abstract class LivingEntity extends Entity {
@@ -115,10 +115,10 @@ index c304a3a1fc2feaf2a3ada1330ea79e6fd95e2f01..7768b5169a77be3b50464c9ffa246fd1
          return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 4cd4c0b89090c12e409fcdb3f7757bea74071417..e00ee14fda89a2befbea90e053c2d46ff2ce48ec 100644
+index 2fc7fb7c907b8e05b66bdd834e5191bc10ec6d4b..d28502200aefc10db1e8be5a29459e12413fa969 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1383,5 +1383,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1398,5 +1398,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setImmuneToFire(Boolean fireImmune) {
          getHandle().immuneToFire = fireImmune;
      }
