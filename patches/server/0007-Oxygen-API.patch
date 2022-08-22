@@ -21,7 +21,7 @@ index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ff
      private UUID originWorld;
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public @Nullable Boolean immuneToFire = null; // Tentacles - Fire Immunity API
-+    public boolean reverseOxygen = true; // Tentacles - Oxygen API
++    public boolean reverseOxygen = false; // Tentacles - Oxygen API
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
