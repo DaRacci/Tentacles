@@ -5,14 +5,23 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..fe7db4fab5355ad8fcec69f07c6deba3af2d28f8 100644
+index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ffcd5cdcce 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -341,7 +341,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     private static final int FLAG_INVISIBLE = 5;
+     protected static final int FLAG_GLOWING = 6;
+     protected static final int FLAG_FALL_FLYING = 7;
+-    private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
++    protected static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT); // Tentacles - private->protected
+     private static final EntityDataAccessor<Optional<Component>> DATA_CUSTOM_NAME = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.OPTIONAL_COMPONENT);
+     private static final EntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+     private static final EntityDataAccessor<Boolean> DATA_SILENT = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
 @@ -400,6 +400,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      private UUID originWorld;
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public @Nullable Boolean immuneToFire = null; // Tentacles - Fire Immunity API
-+    public boolean reverseOxygen = false; // Tentacles - Oxygen API
++    public boolean reverseOxygen = true; // Tentacles - Oxygen API
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
@@ -114,6 +123,22 @@ index 97af52d449ff2e7b0ca7744db5efb32979abce9c..757d610913a5e22173f36c5214d4a6f3
      public boolean canSpawnSoulSpeedParticle() {
          return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
      }
+diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
+index 64ca2c92c4908bbb0272d1c22870af68aa9daad2..a13d69a11426157f5c3c31227c20f7413f55d44f 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Player.java
++++ b/src/main/java/net/minecraft/world/entity/player/Player.java
+@@ -305,6 +305,11 @@ public abstract class Player extends LivingEntity {
+         }
+ 
+         this.updateIsUnderwater();
++        // Tentacles start - Client tries to reduce air on its own
++        if (this.reverseOxygen && this.isUnderWater() && this.getAirSupply() == this.getMaxAirSupply()) {
++            this.entityData.markDirty(Entity.DATA_AIR_SUPPLY_ID);
++        }
++        // Tentacles end
+         super.tick();
+         if (!this.level.isClientSide && this.containerMenu != null && !this.containerMenu.stillValid(this)) {
+             this.closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index 2fc7fb7c907b8e05b66bdd834e5191bc10ec6d4b..d28502200aefc10db1e8be5a29459e12413fa969 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java

@@ -13,7 +13,7 @@ purpur=$(curl -H "Accept: application/vnd.github.v3+json" https://api.github.com
 
 updated=""
 logsuffix=""
-if [ ! -z "$purpur" ]; then
+if [ -n "$purpur" ]; then
     logsuffix="$logsuffix\n\nPurpur Changes:\n$purpur"
     updated="Purpur"
 fi
