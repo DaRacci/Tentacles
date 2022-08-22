@@ -66,7 +66,7 @@ paperweight {
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
-    useStandardUpstream("petal") {
+    useStandardUpstream("purpur") {
         url.set(github("PurpurMC", "Purpur"))
         ref.set(providers.gradleProperty("purpurCommit"))
 

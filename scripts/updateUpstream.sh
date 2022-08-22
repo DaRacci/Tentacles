@@ -6,7 +6,7 @@
 set -e
 PS1="$"
 
-current=$(cat gradle.properties | grep petalCommit | sed 's/purpurCommit = //')
+current=$(cat gradle.properties | grep purpurCommit | sed 's/purpurCommit = //')
 upstream=$(git ls-remote https://github.com/PurpurMC/Purpur | grep ver/1.19.2 | cut -f 1)
 
 if [ "$current" != "$upstream" ]; then
