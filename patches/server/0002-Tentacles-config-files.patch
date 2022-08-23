@@ -389,10 +389,10 @@ index a97dbbf02499db79980167ad3d42d467f9f43794..3f9398a1461691ccda54710f29990d3a
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 5199e59c606833f90610f7360121e9628abafe2e..44e9bbbecfaabf40a7a0181ec9f1634560db4c9b 100644
+index 420300ce19d01f36f071eae44efd4cb32beb0ed6..e47de067a01b297dd1410fa475f9d2e2f2f2f712 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
-@@ -166,6 +166,14 @@ public class Main {
+@@ -172,6 +172,14 @@ public class Main {
                      .describedAs("Yml file");
                  // Purpur end
  
