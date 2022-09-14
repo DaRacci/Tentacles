@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ffcd5cdcce 100644
+index 00ff195f91591b76cb8bded942bbd449990a75c7..76eea1d513c3f9edf8d57db18b0f3afaeef0617e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -341,7 +341,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -25,7 +25,7 @@ index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ff
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -2292,6 +2293,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2306,6 +2307,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (immuneToFire != null) {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
@@ -35,7 +35,7 @@ index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ff
              // Tentacles end
              return nbt;
          } catch (Throwable throwable) {
-@@ -2464,6 +2468,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2478,6 +2482,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              if (nbt.contains("Purpur.FireImmune")) {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
@@ -46,7 +46,7 @@ index 4dbedb5192983dfa42c3de6ec7b754ed8a1253be..2791bb18ec509d643602d3ffcf3ca9ff
  
          } catch (Throwable throwable) {
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 97af52d449ff2e7b0ca7744db5efb32979abce9c..757d610913a5e22173f36c5214d4a6f3108f3d3f 100644
+index 8b5b7475941e1f3fecb99d084c8e95dc93c0b75d..d811b00e3906d643f36bd448cc2ddbec3ec52785 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -428,28 +428,24 @@ public abstract class LivingEntity extends Entity {
@@ -140,10 +140,10 @@ index 64ca2c92c4908bbb0272d1c22870af68aa9daad2..a13d69a11426157f5c3c31227c20f741
          if (!this.level.isClientSide && this.containerMenu != null && !this.containerMenu.stillValid(this)) {
              this.closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 2fc7fb7c907b8e05b66bdd834e5191bc10ec6d4b..d28502200aefc10db1e8be5a29459e12413fa969 100644
+index 3f3b7544643feeb3e6ab3f9b49963e57743b1de3..55d01f758e566d2870f131d8d2507c4dcf7cdadb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1398,5 +1398,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1415,5 +1415,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public void setImmuneToFire(Boolean fireImmune) {
          getHandle().immuneToFire = fireImmune;
      }

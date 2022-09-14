@@ -5,7 +5,7 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 411593b1b105d62440d76b7bd1b8c74b701e3e75..96fa8268527e6095ad4f8229368fa9b5489073d5 100644
+index 8f80b2f14c582d248988a824193d1fd0df177dc5..ac33ad2de88bc5d5f0335c488c05975761ff8cb0 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -266,6 +266,10 @@ public abstract class LivingEntity extends Entity {
@@ -29,10 +29,10 @@ index 411593b1b105d62440d76b7bd1b8c74b701e3e75..96fa8268527e6095ad4f8229368fa9b5
  
      public float getSwimAmount(float tickDelta) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 749bcdd5ac8dbe9333e74068ff577eabf3a8da29..96337ab39257aef77491db310d92f3a7e6168c0e 100644
+index 81ec8f10ed49cef6a620483d1dd828f7b509a8e5..59357e21840a3890fca00fca77ed24ceaf7777c3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -948,4 +948,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -994,4 +994,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end

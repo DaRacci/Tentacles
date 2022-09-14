@@ -5,7 +5,7 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 424f7e39c613bb78948aefa6449cd5f755136599..97af52d449ff2e7b0ca7744db5efb32979abce9c 100644
+index ac33ad2de88bc5d5f0335c488c05975761ff8cb0..8b5b7475941e1f3fecb99d084c8e95dc93c0b75d 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -269,6 +269,7 @@ public abstract class LivingEntity extends Entity {
@@ -16,7 +16,7 @@ index 424f7e39c613bb78948aefa6449cd5f755136599..97af52d449ff2e7b0ca7744db5efb329
      // Tentacles end
  
      @Override
-@@ -2753,7 +2754,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2775,7 +2776,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canStandOnFluid(FluidState state) {
@@ -26,7 +26,7 @@ index 424f7e39c613bb78948aefa6449cd5f755136599..97af52d449ff2e7b0ca7744db5efb329
  
      public void travel(Vec3 movementInput) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 96337ab39257aef77491db310d92f3a7e6168c0e..0d86464f04bb7bef69a7122019464fa7a487c8ee 100644
+index 59357e21840a3890fca00fca77ed24ceaf7777c3..421002fb690ba579ccb4e4c1f0b44e4b818a2c5b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
@@ -42,7 +42,7 @@ index 96337ab39257aef77491db310d92f3a7e6168c0e..0d86464f04bb7bef69a7122019464fa7
  import org.bukkit.FluidCollisionMode;
  import org.bukkit.Location;
  import org.bukkit.Material;
-@@ -83,6 +86,7 @@ import org.bukkit.potion.PotionType;
+@@ -85,6 +88,7 @@ import org.bukkit.potion.PotionType;
  import org.bukkit.util.BlockIterator;
  import org.bukkit.util.RayTraceResult;
  import org.bukkit.util.Vector;
@@ -50,7 +50,7 @@ index 96337ab39257aef77491db310d92f3a7e6168c0e..0d86464f04bb7bef69a7122019464fa7
  
  public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      private CraftEntityEquipment equipment;
-@@ -959,5 +963,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1005,5 +1009,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      public boolean canBreathUnderwater() {
          return getHandle().canBreatheUnderwater();
      }

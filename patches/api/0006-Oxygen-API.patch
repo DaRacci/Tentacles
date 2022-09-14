@@ -5,10 +5,10 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index c197bd8f291a4a2a5dae5633613aeba13b888ff3..d531415d6f731af8e3820cd4c5cb1c27bb651c0a 100644
+index 0fca09dd46f5c0e0943aeca759ffc9a659f7fe4b..b058fa4840dd8a1f4654d1fddebef27925dcd1e2 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -972,5 +972,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -999,5 +999,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       * Set this to null to restore the entity type default
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);

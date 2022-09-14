@@ -5,10 +5,10 @@ Subject: [PATCH] Stand on fluid API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 3275f11e054127417ad8187a8305ee5eea3619d3..f5ef33c4e52657cc0324f60c31c99125583306c9 100644
+index 9c8466f432811727922101283326321da37f5015..249df330d95d15c9a7712488fa5e33635c82bf2a 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -963,5 +963,9 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1040,5 +1040,9 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       * @return True if the mob can breath underwater
       */
      boolean canBreathUnderwater();
