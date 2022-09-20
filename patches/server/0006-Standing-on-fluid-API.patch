@@ -5,7 +5,7 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index ac33ad2de88bc5d5f0335c488c05975761ff8cb0..8b5b7475941e1f3fecb99d084c8e95dc93c0b75d 100644
+index b95e8c506eb4c3921656f2a56bce28aa8b306993..cca9edb4fb6e30b8d83919319c20874b42fb3f97 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -269,6 +269,7 @@ public abstract class LivingEntity extends Entity {
@@ -26,7 +26,7 @@ index ac33ad2de88bc5d5f0335c488c05975761ff8cb0..8b5b7475941e1f3fecb99d084c8e95dc
  
      public void travel(Vec3 movementInput) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 59357e21840a3890fca00fca77ed24ceaf7777c3..421002fb690ba579ccb4e4c1f0b44e4b818a2c5b 100644
+index e1fa8be6af4cd82f366a592ad224182c08524402..76374e28378e42185c6bb05c6b7d9c4c5944528f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
@@ -50,7 +50,7 @@ index 59357e21840a3890fca00fca77ed24ceaf7777c3..421002fb690ba579ccb4e4c1f0b44e4b
  
  public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      private CraftEntityEquipment equipment;
-@@ -1005,5 +1009,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1017,5 +1021,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      public boolean canBreathUnderwater() {
          return getHandle().canBreatheUnderwater();
      }
