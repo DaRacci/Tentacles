@@ -355,10 +355,10 @@ index 5e0fb02ccd1204a72b2d730a25e35844a07c5759..202f04f915d7e9310be6512ef326173e
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 17bd112918421d3391fd6b1781ee9b9d4854db78..cba0a7584814aef8cf68c9850ba50047ffb87ca1 100644
+index 1c28a0ef800bddf582bca10e50cb12cb3b1e0a38..829a3a208243df3c4f260d7b514b9b7310028c05 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -993,6 +993,7 @@ public final class CraftServer implements Server {
+@@ -998,6 +998,7 @@ public final class CraftServer implements Server {
          org.spigotmc.SpigotConfig.init((File) console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
          org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur
@@ -366,7 +366,7 @@ index 17bd112918421d3391fd6b1781ee9b9d4854db78..cba0a7584814aef8cf68c9850ba50047
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
-@@ -1009,6 +1010,7 @@ public final class CraftServer implements Server {
+@@ -1014,6 +1015,7 @@ public final class CraftServer implements Server {
              }
              world.spigotConfig.init(); // Spigot
              world.purpurConfig.init(); // Purpur
@@ -374,7 +374,7 @@ index 17bd112918421d3391fd6b1781ee9b9d4854db78..cba0a7584814aef8cf68c9850ba50047
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
-@@ -2832,6 +2834,13 @@ public final class CraftServer implements Server {
+@@ -2837,6 +2839,13 @@ public final class CraftServer implements Server {
          }
          // Purpur end
  
