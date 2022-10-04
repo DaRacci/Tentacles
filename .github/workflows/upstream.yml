@@ -6,6 +6,7 @@ on:
 jobs:
   upstream:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     outputs:
       patches: ${{ steps.changes.outputs.patches }}
     steps:

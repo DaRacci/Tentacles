@@ -5,7 +5,7 @@ Subject: [PATCH] Fire Immunity API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index ffbe6f3b5fdd60332627fdb6a7ea050d21ad8cdb..00ff195f91591b76cb8bded942bbd449990a75c7 100644
+index efd84a22bc063fe6266be876a38186c08296caa2..b98128c0c9699e917b4f758801f249cbeccfecd9 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -399,6 +399,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -16,7 +16,7 @@ index ffbe6f3b5fdd60332627fdb6a7ea050d21ad8cdb..00ff195f91591b76cb8bded942bbd449
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -1664,7 +1665,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1665,7 +1666,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      }
  
      public boolean fireImmune() {
@@ -25,7 +25,7 @@ index ffbe6f3b5fdd60332627fdb6a7ea050d21ad8cdb..00ff195f91591b76cb8bded942bbd449
      }
  
      public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
-@@ -2301,6 +2302,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2302,6 +2303,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Paper.FreezeLock", true);
              }
              // Paper end
@@ -37,7 +37,7 @@ index ffbe6f3b5fdd60332627fdb6a7ea050d21ad8cdb..00ff195f91591b76cb8bded942bbd449
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2468,6 +2474,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2469,6 +2475,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  freezeLocked = nbt.getBoolean("Paper.FreezeLock");
              }
              // Paper end
