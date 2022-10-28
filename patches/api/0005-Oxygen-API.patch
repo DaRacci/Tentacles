@@ -5,14 +5,15 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 0fca09dd46f5c0e0943aeca759ffc9a659f7fe4b..b058fa4840dd8a1f4654d1fddebef27925dcd1e2 100644
+index 3959765b110b6fed91348c11ff85e302a885776c..55d19ce41d73f0af3c51cfe0a64a5846a3fb94ab 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -999,5 +999,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-      * Set this to null to restore the entity type default
+@@ -1002,4 +1002,17 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
+     // Purpur end
 +
++    // Tentacles start
 +    /**
 +     * Checks if the entity has reverse oxygen
 +     * @return True if gains oxygen in water and looses oxygen in air
@@ -23,5 +24,5 @@ index 0fca09dd46f5c0e0943aeca759ffc9a659f7fe4b..b058fa4840dd8a1f4654d1fddebef279
 +     * Sets if the entity has reverse oxygen
 +     */
 +    void setReverseOxygen(boolean reverseOxygen);
-     // Tentacles end
++    // Tentacles end
  }

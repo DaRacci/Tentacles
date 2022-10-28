@@ -5,10 +5,10 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 4a4606f2598b868e43c270cd3056d44549bc914e..9c8466f432811727922101283326321da37f5015 100644
+index c730b7e091b897fac7faa2d756b90ea5f0cef44d..64a498110cae27b1390630b4949daf53adb981b1 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1023,4 +1023,22 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1053,4 +1053,22 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end

@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a61a0f4f1ce89681336d2ed246e6b616aa6fe73d..d1b6081c1985485e74171274efd28d1444f666ee 100644
+index 2ee34f92e8a89b90448bbf710fdc0d5d6350e919..b4bc46b88aa34bc07b3bf2575996d45bdd62745c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -9,7 +9,7 @@ plugins {
@@ -86,7 +86,7 @@ index b5b6657e52e4f7a630229bd3ba433438af293e22..43b9988c975f2f51ac9c56cb8198598c
          stringbuilder.append("// ");
          stringbuilder.append(CrashReport.getErrorComment());
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 13c9cddf7ac0af16676050e3bcdf22b7475a0387..6365670de7aafad598bd3b369fba5a8165dac951 100644
+index 735e01c550d561aa21c3c8f7f34a495ec3a0ab67..596c11d77d89c6d0899fd9b522bd87994ad2a473 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -926,7 +926,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -112,10 +112,10 @@ index 3aa9a667d988fe2b6118ce4b3a4551e7e17b7884..c96053289a010906194eb2f600d59935
  
      private static final int DEFAULT_SIZE_THRESHOLD = 1024 * 8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e9c20441e37db68d500c230a4371610f98c69428..9c103317bca657f3046b1601eecd296bb710ea90 100644
+index 2491785f5edd782b74189bef33eeffe13288f3da..d043fbf75faf0d83ab0d2701074a312227925a91 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -248,7 +248,7 @@ import javax.annotation.Nullable; // Paper
+@@ -249,7 +249,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -125,7 +125,7 @@ index e9c20441e37db68d500c230a4371610f98c69428..9c103317bca657f3046b1601eecd296b
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 37bcc72ce132f7901460f25d700dba1bac6c210f..da27e5a60c4c362773958b6cee935b562f437d0b 100644
+index 9e192788af0b2ae5479c2fae1239b10e1ff45351..cdfdcaa296a685f23b7aea683d68cb794ac1e0c7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -866,7 +866,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
@@ -164,7 +164,7 @@ index fb87620c742ff7912f5e8ccd2a7930dd605576d9..ac3eb63179e66753ed68dd95e68c7553
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 14844cb8a402ac987f44a91b95d5ebdac73c6dfe..a1ab810dc665442fc91c523f40f9790dbe624c2a 100644
+index ccca392a45cb05abb55ddd5c6c36e6f9c7a5d171..489de03ad567359d22ef337b15b916b46b40fa78 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 @@ -244,7 +244,7 @@ public class PurpurConfig {

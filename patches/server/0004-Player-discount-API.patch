@@ -5,7 +5,7 @@ Subject: [PATCH] Player discount API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d9f4044555734fb33a5d69cb5d4609aea8a83e2c 100644
+index b1a4b83fc248ae2f0a8852e60f9cd4486535390a..53dbc78dd26c36c4d1cb1c0e400b7c214c21e7a1 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -608,9 +608,22 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
@@ -40,7 +40,7 @@ index b5db8212aa6b20fbaa8ea7dbcd14c9cc13460fe0..d9f4044555734fb33a5d69cb5d4609ae
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
-index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63af3ce901 100644
+index 17cc3237c7fc8ceda136b2371fabf6f004a991aa..0cb3f3bdd128632e8618961ef0e242588326a0f3 100644
 --- a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 +++ b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
 @@ -6,6 +6,11 @@ import net.minecraft.util.Mth;
@@ -63,7 +63,26 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
      // CraftBukkit start
      private CraftMerchantRecipe bukkitHandle;
  
-@@ -73,6 +79,16 @@ public class MerchantOffer {
+@@ -39,11 +45,16 @@ public class MerchantOffer {
+         this(itemstack, itemstack1, itemstack2, uses, maxUses, experience, priceMultiplier, 0, ignoreDiscounts, bukkit);
+     }
+     public MerchantOffer(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int uses, int maxUses, int experience, float priceMultiplier, int demand, boolean ignoreDiscounts, CraftMerchantRecipe bukkit) {
+-        this(itemstack, itemstack1, itemstack2, uses, maxUses, experience, priceMultiplier, demand, ignoreDiscounts);
++        // Tentacles Start - add playerDiscounts param
++        this(itemstack, itemstack1, itemstack2, uses, maxUses, experience, priceMultiplier, demand, ignoreDiscounts, null, bukkit);
+         // Paper end
+-        this.bukkitHandle = bukkit;
+     }
+     // CraftBukkit end
++    public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts, Map<UUID, Double> playerDiscounts, CraftMerchantRecipe bukkit) {
++        this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, ignoreDiscounts, playerDiscounts);
++        this.bukkitHandle = bukkit;
++    }
++    // Tentacles end
+ 
+     public MerchantOffer(CompoundTag nbt) {
+         this.rewardExp = true;
+@@ -73,6 +84,16 @@ public class MerchantOffer {
          this.specialPriceDiff = nbt.getInt("specialPrice");
          this.demand = nbt.getInt("demand");
          this.ignoreDiscounts = nbt.getBoolean("Paper.IgnoreDiscounts"); // Paper
@@ -80,7 +99,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
      }
  
      public MerchantOffer(ItemStack buyItem, ItemStack sellItem, int maxUses, int merchantExperience, float priceMultiplier) {
-@@ -95,8 +111,13 @@ public class MerchantOffer {
+@@ -95,8 +116,13 @@ public class MerchantOffer {
          this(firstBuyItem, secondBuyItem, sellItem, uses, maxUses, merchantExperience, priceMultiplier, demandBonus, false);
      }
      public MerchantOffer(ItemStack firstBuyItem, ItemStack secondBuyItem, ItemStack sellItem, int uses, int maxUses, int merchantExperience, float priceMultiplier, int demandBonus, boolean ignoreDiscounts) {
@@ -96,7 +115,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
          this.rewardExp = true;
          this.xp = 1;
          this.baseCostA = firstBuyItem;
-@@ -107,7 +128,9 @@ public class MerchantOffer {
+@@ -107,7 +133,9 @@ public class MerchantOffer {
          this.xp = merchantExperience;
          this.priceMultiplier = priceMultiplier;
          this.demand = demandBonus;
@@ -106,7 +125,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
  
      public ItemStack getBaseCostA() {
          return this.baseCostA;
-@@ -218,6 +241,15 @@ public class MerchantOffer {
+@@ -218,6 +246,15 @@ public class MerchantOffer {
          nbttagcompound.putInt("specialPrice", this.specialPriceDiff);
          nbttagcompound.putInt("demand", this.demand);
          nbttagcompound.putBoolean("Paper.IgnoreDiscounts", this.ignoreDiscounts); // Paper
@@ -123,7 +142,7 @@ index 9a402505375af2051673245ec0a1daf9f3a66dc7..7ac39baf49fdaf4cd71dad9dd2812d63
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
-index 0f038f6152c90e707cb633dffcab0a1c5b99d260..27d7ddf2bfac63c9cdd0c863cf9adaa39d723210 100644
+index c48f67f4202e32d9793b462609bd3b95c9765bbd..4d148448c51379f1270f18b52186d1dfab514a80 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMerchantRecipe.java
 @@ -1,7 +1,9 @@
@@ -133,9 +152,9 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..27d7ddf2bfac63c9cdd0c863cf9adaa3
 +import java.util.HashMap;
  import java.util.List;
 +import java.util.UUID;
- import org.bukkit.Material;
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.inventory.MerchantRecipe;
+ 
 @@ -29,8 +31,11 @@ public class CraftMerchantRecipe extends MerchantRecipe {
          this(result, uses, maxUses, experienceReward, experience, priceMultiplier, demand, specialPrice, false);
      }
@@ -150,13 +169,14 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..27d7ddf2bfac63c9cdd0c863cf9adaa3
          this.handle = new net.minecraft.world.item.trading.MerchantOffer(
                  net.minecraft.world.item.ItemStack.EMPTY,
                  net.minecraft.world.item.ItemStack.EMPTY,
-@@ -41,11 +46,12 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+@@ -41,11 +46,13 @@ public class CraftMerchantRecipe extends MerchantRecipe {
                  priceMultiplier,
                  demand,
                  ignoreDiscounts, // Paper - add ignoreDiscounts param
--                this
-+                playerDiscounts
-         );
++                playerDiscounts,
+                 this
+-        );
++            );
          this.setSpecialPrice(specialPrice);
          this.setExperienceReward(experienceReward);
      }
@@ -164,7 +184,7 @@ index 0f038f6152c90e707cb633dffcab0a1c5b99d260..27d7ddf2bfac63c9cdd0c863cf9adaa3
  
      @Override
      public int getSpecialPrice() {
-@@ -129,6 +135,38 @@ public class CraftMerchantRecipe extends MerchantRecipe {
+@@ -129,6 +136,38 @@ public class CraftMerchantRecipe extends MerchantRecipe {
      }
      // Paper end
  
