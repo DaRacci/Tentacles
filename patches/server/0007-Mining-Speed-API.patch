@@ -1,0 +1,223 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Sat, 5 Nov 2022 17:26:03 +1100
+Subject: [PATCH] Mining Speed API
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 467f60dcbed645d773e7e3e042d2bbbd8f5bb589..294a33be403037233386e1441b96a4f4570e3b8e 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -6,12 +6,18 @@ import com.mojang.authlib.GameProfile;
+ import com.mojang.datafixers.util.Either;
+ import com.mojang.logging.LogUtils;
+ import com.mojang.serialization.DataResult;
++import it.unimi.dsi.fastutil.Pair; // Tentacles
+ import java.util.Collection;
++import java.util.HashMap;
+ import java.util.Iterator;
+ import java.util.List;
++import java.util.Map; // Tentacles
+ import java.util.Objects;
+ import java.util.Optional;
+ import java.util.OptionalInt;
++import java.util.concurrent.atomic.AtomicBoolean; // Tentacles
++import java.util.concurrent.atomic.AtomicReference; // Tentacles
++import java.util.function.BiPredicate;
+ import javax.annotation.Nullable;
+ import net.minecraft.BlockUtil;
+ import net.minecraft.ChatFormatting;
+@@ -89,12 +95,14 @@ import net.minecraft.stats.ServerRecipeBook;
+ import net.minecraft.stats.ServerStatsCounter;
+ import net.minecraft.stats.Stat;
+ import net.minecraft.stats.Stats;
++import net.minecraft.tags.FluidTags; // Tentacles
+ import net.minecraft.util.Mth;
+ import net.minecraft.util.RandomSource;
+ import net.minecraft.util.Unit;
+ import net.minecraft.world.damagesource.DamageSource;
+ import net.minecraft.world.damagesource.EntityDamageSource;
+ import net.minecraft.world.effect.MobEffectInstance;
++import net.minecraft.world.effect.MobEffectUtil; // Tentacles
+ import net.minecraft.world.effect.MobEffects;
+ import net.minecraft.world.entity.Entity;
+ import net.minecraft.world.entity.EntitySelector;
+@@ -145,6 +153,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
+ import net.minecraft.world.level.portal.PortalInfo;
+ import net.minecraft.world.phys.AABB;
+ import net.minecraft.world.phys.Vec3;
++import org.bukkit.NamespacedKey; // Tentacles
+ import org.slf4j.Logger;
+ import net.minecraft.world.Container;
+ import net.minecraft.world.InteractionHand;
+@@ -271,6 +280,10 @@ public class ServerPlayer extends Player {
+     public double lastEntitySpawnRadiusSquared; // Paper - optimise isOutsideRange, this field is in blocks
+     public final com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> cachedSingleHashSet; // Paper
+     public org.bukkit.event.player.PlayerQuitEvent.QuitReason quitReason = null; // Paper - there are a lot of changes to do if we change all methods leading to the event
++    // Tentacles start - Mining speed API
++    public boolean alwaysCorrectTool = false;
++    public final Map<NamespacedKey, Pair<BiPredicate<Player, BlockState>, Float>> customMiningMultipliers = new HashMap<>();
++    // Tentacles end
+ 
+     public ServerPlayer(MinecraftServer server, ServerLevel world, GameProfile profile, @Nullable ProfilePublicKey publicKey) {
+         super(world, world.getSharedSpawnPos(), world.getSharedSpawnAngle(), profile, publicKey);
+@@ -2667,4 +2680,25 @@ public class ServerPlayer extends Player {
+         this.compassBar = compassBar;
+     }
+     // Purpur end
++
++    // Tentacles start
++    @Override
++    public float getDestroySpeed(BlockState state) {
++        return this.getDestroySpeedPair(state).left();
++    }
++
++
++    public Pair<Float, Boolean> getDestroySpeedPair(BlockState block) {
++        final var nonVanillaSpeed = new AtomicBoolean();
++        final var finalDestroySpeed = new AtomicReference<>(super.getDestroySpeed(block));
++        this.customMiningMultipliers.values().forEach(pair -> {
++
++            if (pair.left().test(this, block)) {
++                nonVanillaSpeed.set(true);
++                finalDestroySpeed.updateAndGet(v -> (v * 1.0F + pair.right() * 0.2F) - v);
++            }
++        });
++
++        return Pair.of(finalDestroySpeed.get(), nonVanillaSpeed.get());
++    }
+ }
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
+index 4816b5bd54ae6e080af4c19df43d57e852e76146..279a89d415318a26dd4d900e1606f1d1d91511cb 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
+@@ -3,6 +3,12 @@ package net.minecraft.server.level;
+ import com.mojang.logging.LogUtils;
+ import java.util.Objects;
+ import javax.annotation.Nullable;
++import net.minecraft.core.particles.BlockParticleOption; // Tentacles
++import net.minecraft.core.particles.ParticleTypes; // Tentacles
++import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
++import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket; // Tentacles
++import net.minecraft.network.protocol.game.ClientboundSoundPacket; // Tentacles
++import net.minecraft.sounds.SoundSource; // Tentacles
+ import net.minecraft.world.InteractionHand;
+ import net.minecraft.world.InteractionResult;
+ import net.minecraft.world.InteractionResultHolder;
+@@ -64,6 +70,7 @@ public class ServerPlayerGameMode {
+     private int lastSentState;
+     public boolean captureSentBlockEntities = false; // Paper
+     public boolean capturedBlockEntity = false; // Paper
++    public boolean manipulatedMining = false; // Tentacles
+ 
+     public ServerPlayerGameMode(ServerPlayer player) {
+         this.gameModeForPlayer = GameType.DEFAULT_MODE;
+@@ -135,6 +142,17 @@ public class ServerPlayerGameMode {
+ 
+                 if (f >= 1.0F) {
+                     this.hasDelayedDestroy = false;
++                    // Tentacles start - Mining speed API
++                    if (manipulatedMining) {
++                        final var x = delayedDestroyPos.getX() + 0.5;
++                        final var y = delayedDestroyPos.getY() + 0.5;
++                        final var z = delayedDestroyPos.getZ() + 0.5;
++
++                        this.player.connection.send(new ClientboundLevelParticlesPacket(new BlockParticleOption(ParticleTypes.BLOCK, iblockdata), false, x, y, z, 0.1F, 0.1F, 0.1F, 4, 100));
++                        this.player.connection.send(new ClientboundSoundPacket(iblockdata.getSoundType().breakSound, SoundSource.BLOCKS, x, y, z, 1.0F, 1.0F, this.level.getSeed()));
++                        this.manipulatedMining = false;
++                    }
++                    // Tentacles end
+                     this.destroyBlock(this.delayedDestroyPos);
+                 }
+             }
+@@ -159,13 +177,28 @@ public class ServerPlayerGameMode {
+ 
+     private float incrementDestroyProgress(BlockState state, BlockPos pos, int failedStartMiningTime) {
+         int j = this.gameTicks - failedStartMiningTime;
+-        float f = state.getDestroyProgress(this.player, this.player.level, pos) * (float) (j + 1);
++        // Tentacles start - Mining speed API
++        final var pair = state.getDestroyProgressPair(this.player, this.player.level, pos);
++        float f = pair.left() * (float) (j + 1);
++        // Tentacles end
+         int k = (int) (f * 10.0F);
+ 
+         if (k != this.lastSentState) {
+             this.level.destroyBlockProgress(this.player.getId(), pos, k);
+             this.lastSentState = k;
+         }
++        // Tentacles start - Mining speed API
++        if (pair.right()) {
++            this.player.connection.send(new ClientboundBlockDestructionPacket(this.player.getId() - 1, pos, k));
++            this.manipulatedMining = true;
++
++            if (f >= 1.0F) {
++                this.hasDelayedDestroy = true;
++                this.delayedDestroyPos = pos;
++                this.delayedTickStart = this.destroyProgressStart;
++            }
++        }
++        // Tentacles end
+ 
+         return f;
+     }
+@@ -313,6 +346,9 @@ public class ServerPlayerGameMode {
+                     this.destroyPos = BlockPos.ZERO; // Paper
+                 }
+ 
++                if (manipulatedMining) {
++                    this.player.connection.send(new ClientboundBlockDestructionPacket(this.player.getId() - 1, pos, -1));
++                }
+                 this.level.destroyBlockProgress(this.player.getId(), pos, -1);
+                 this.debugLogging(pos, true, sequence, "aborted destroying");
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
+index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..731fec622268ea68d4bd9424ec41e6254b39b866 100644
+--- a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
++++ b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
+@@ -3,6 +3,7 @@ package net.minecraft.world.level.block.state;
+ 
+ import com.google.common.collect.ImmutableMap;
+ import com.mojang.serialization.MapCodec;
++import it.unimi.dsi.fastutil.Pair; // Tentacles
+ import java.util.Arrays;
+ import java.util.Collections;
+ import java.util.List;
+@@ -20,6 +21,7 @@ import net.minecraft.core.Registry;
+ import net.minecraft.network.protocol.game.DebugPackets;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.server.level.ServerLevel;
++import net.minecraft.server.level.ServerPlayer; // Tentacles
+ import net.minecraft.tags.FluidTags;
+ import net.minecraft.tags.TagKey;
+ import net.minecraft.util.Mth;
+@@ -885,9 +887,29 @@ public abstract class BlockBehaviour {
+         }
+ 
+         public float getDestroyProgress(Player player, BlockGetter world, BlockPos pos) {
+-            return this.getBlock().getDestroyProgress(this.asState(), player, world, pos);
++            // Tentacles start - Mining speed API
++            return this.getDestroyProgressPair(player, world, pos).left();
+         }
+ 
++        public Pair<@org.jetbrains.annotations.NotNull Float, @org.jetbrains.annotations.NotNull Boolean> getDestroyProgressPair(Player player, BlockGetter world, BlockPos pos) {
++            final var state = this.asState();
++            float f = state.getDestroySpeed(world, pos);
++
++            if (f == -1.0F) {
++                return Pair.of(0.0F, false);
++            } else {
++                if (player instanceof ServerPlayer serverPlayer) {
++                    final var correctToolModifier = (serverPlayer.alwaysCorrectTool || player.hasCorrectToolForDrops(state)) ? 30 : 100;
++                    final var speedPair = serverPlayer.getDestroySpeedPair(state);
++                    return Pair.of(speedPair.left() / f / (float) correctToolModifier, speedPair.right() || serverPlayer.alwaysCorrectTool);
++                } else {
++                    int i = player.hasCorrectToolForDrops(state) ? 30 : 100;
++                    return Pair.of(player.getDestroySpeed(state) / f / (float) i, false);
++                }
++            }
++        }
++        // Tentacles end
++
+         public int getDirectSignal(BlockGetter world, BlockPos pos, Direction direction) {
+             return this.getBlock().getDirectSignal(this.asState(), world, pos, direction);
+         }
