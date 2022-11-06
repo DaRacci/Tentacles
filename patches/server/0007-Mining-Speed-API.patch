@@ -5,7 +5,7 @@ Subject: [PATCH] Mining Speed API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 467f60dcbed645d773e7e3e042d2bbbd8f5bb589..397e45f92efe0cc3cca7d05836797e425805730f 100644
+index 467f60dcbed645d773e7e3e042d2bbbd8f5bb589..b68ceb3c7f912d3dbf2c213b9295cbef994629fa 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -6,12 +6,19 @@ import com.mojang.authlib.GameProfile;
@@ -70,7 +70,7 @@ index 467f60dcbed645d773e7e3e042d2bbbd8f5bb589..397e45f92efe0cc3cca7d05836797e42
  
      public ServerPlayer(MinecraftServer server, ServerLevel world, GameProfile profile, @Nullable ProfilePublicKey publicKey) {
          super(world, world.getSharedSpawnPos(), world.getSharedSpawnAngle(), profile, publicKey);
-@@ -2667,4 +2682,32 @@ public class ServerPlayer extends Player {
+@@ -2667,4 +2682,26 @@ public class ServerPlayer extends Player {
          this.compassBar = compassBar;
      }
      // Purpur end
@@ -81,30 +81,24 @@ index 467f60dcbed645d773e7e3e042d2bbbd8f5bb589..397e45f92efe0cc3cca7d05836797e42
 +        return this.getDestroySpeedPair(state).left();
 +    }
 +
-+
 +    public Pair<Float, Boolean> getDestroySpeedPair(BlockState block) {
-+        final var nonVanillaSpeed = new AtomicBoolean();
-+        final var finalDestroySpeed = new AtomicReference<>(super.getDestroySpeed(block));
++        final var baseSpeed = super.getDestroySpeed(block);
++        final var finalDestroySpeed = new AtomicReference<>((float) baseSpeed);
 +
 +        final var bukkitState = CraftBlockStates.getBlockState(block, null);
 +        final var bukkitPlayer = this.getBukkitEntity();
 +
-+        Tentacles.getGlobalMiningModifiers().values().forEach(pair -> {
-+            if (pair.left().test(bukkitPlayer, bukkitState)) {
-+                finalDestroySpeed.updateAndGet(v -> {
-+                    final var newValue = v * pair.right();
-+                    if (newValue != v) nonVanillaSpeed.set(true);
-+                    return newValue;
-+                });
-+            }
-+        });
++        Tentacles.getGlobalMiningModifiers().values().stream()
++            .map(function -> function.apply(bukkitPlayer, bukkitState))
++            .filter(Objects::nonNull)
++            .forEach(modifier -> finalDestroySpeed.updateAndGet(speed -> speed * modifier));
 +
-+        return Pair.of(finalDestroySpeed.get(), nonVanillaSpeed.get());
++        return Pair.of(finalDestroySpeed.get(), baseSpeed != finalDestroySpeed.get());
 +    }
 +    // Tentacles end
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
-index 4816b5bd54ae6e080af4c19df43d57e852e76146..5bf5e9396d02dd20d317889f45601b0b16099fe1 100644
+index 4816b5bd54ae6e080af4c19df43d57e852e76146..dd7f998ac58febe8d71a8ff206b144460ba0bedc 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
 @@ -3,6 +3,12 @@ package net.minecraft.server.level;
@@ -200,21 +194,26 @@ index 4816b5bd54ae6e080af4c19df43d57e852e76146..5bf5e9396d02dd20d317889f45601b0b
                              this.isDestroyingBlock = false;
                              this.hasDelayedDestroy = true;
                              this.delayedDestroyPos = pos;
-@@ -310,6 +352,12 @@ public class ServerPlayerGameMode {
+@@ -310,9 +352,17 @@ public class ServerPlayerGameMode {
                      BlockState type = this.level.getBlockStateIfLoaded(this.destroyPos); // Paper - don't load unloaded chunks for stale records here
                      if (type != null) this.level.destroyBlockProgress(this.player.getId(), this.destroyPos, -1);
                      if (type != null) this.debugLogging(pos, true, sequence, "aborted mismatched destroying");
 +
-+                    if (manipulatedMining) {
-+                        this.manipulatedMining = false;
-+                        this.player.connection.send(new ClientboundBlockDestructionPacket(this.player.getId() - 1, this.destroyPos, -1));
-+                    }
-+
                      this.destroyPos = BlockPos.ZERO; // Paper
                  }
  
++                // Tentacles start - Mining speed API
++                if (manipulatedMining) {
++                    this.manipulatedMining = false;
++                    this.player.connection.send(new ClientboundBlockDestructionPacket(this.player.getId() - 1, this.destroyPos, -1));
++                }
++                // Tentacles end
++
+                 this.level.destroyBlockProgress(this.player.getId(), pos, -1);
+                 this.debugLogging(pos, true, sequence, "aborted destroying");
+ 
 diff --git a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
-index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..baf1b67725a0ab790c4bf4df9fdee444afb6cfaf 100644
+index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..d825c918562e740e774e7daa4fd8fee67f271c92 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 @@ -3,6 +3,7 @@ package net.minecraft.world.level.block.state;
@@ -257,7 +256,7 @@ index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..baf1b67725a0ab790c4bf4df9fdee444
 +                var speed = speedPair.left() / f / toolModifier;
 +                // For some reason when there is a modifier enabled, and a tool has > 1 speed,
 +                // The actual mining speed is too high, this fixes that. (This took like 3 hours to figure out)
-+                if (speedPair.right() && toolModifier == 30) {
++                if (speedPair.right() && toolModifier == 30 && player.getMainHandItem().getDestroySpeed(state) > 1F) {
 +                    speed *= 0.3F;
 +                }
 +

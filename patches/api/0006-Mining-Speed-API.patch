@@ -6,15 +6,17 @@ Subject: [PATCH] Mining Speed API
 
 diff --git a/src/main/java/dev/racci/tentacles/Tentacles.java b/src/main/java/dev/racci/tentacles/Tentacles.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ad4d500cd5969a672d1e00f8ea6425f1af65aa49
+index 0000000000000000000000000000000000000000..1e2bdefd48acc1b77dc4910900876724aed97081
 --- /dev/null
 +++ b/src/main/java/dev/racci/tentacles/Tentacles.java
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,69 @@
 +package dev.racci.tentacles;
 +
++import com.google.common.collect.ImmutableMap;
 +import it.unimi.dsi.fastutil.Pair;
 +import java.util.HashMap;
 +import java.util.Map;
++import java.util.function.BiFunction;
 +import java.util.function.BiPredicate;
 +import org.bukkit.NamespacedKey;
 +import org.bukkit.block.BlockState;
@@ -23,26 +25,54 @@ index 0000000000000000000000000000000000000000..ad4d500cd5969a672d1e00f8ea6425f1
 +import org.jetbrains.annotations.Nullable;
 +
 +public class Tentacles {
-+    private static final Map<NamespacedKey, Pair<BiPredicate<Player, BlockState>, Float>> customMiningMultipliers = new HashMap<>();
++    private static final Map<NamespacedKey, BiFunction<Player, BlockState, Float>> customMiningMultipliers = new HashMap<>();
 +
-+    public static @NotNull Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> addGlobalMiningModifier(
++    /**
++     * Registers a custom mining modifier.
++     *
++     * @param namespacedKey The namespaced key of the modifier.
++     * @param multiplier The multiplier to apply to the mining speed.
++     * @param predicate The predicate to check if the modifier should be applied.
++     */
++    public static void addGlobalMiningModifier(
 +        @NotNull final NamespacedKey namespacedKey,
 +        final float multiplier,
 +        @NotNull final BiPredicate<Player, BlockState> predicate
-+    ) {
-+        return customMiningMultipliers.compute(namespacedKey, (key, pair) -> Pair.of(predicate, multiplier));
++    ) { customMiningMultipliers.compute(namespacedKey, (key, pair) -> (player, block) -> predicate.test(player, block) ? multiplier : null); }
++
++    /**
++     * Registers a custom mining modifier.
++     *
++     * @param namespacedKey The namespaced key of the modifier.
++     * @param function The function that if returning a non-null value, will be applied to the mining speed.
++     */
++    public static void addGlobalMiningModifier(
++        @NotNull final NamespacedKey namespacedKey,
++        @NotNull final BiFunction<@NotNull Player, @NotNull BlockState, @Nullable Float> function
++    ) { customMiningMultipliers.put(namespacedKey, function); }
++
++    /**
++     * Removes a custom mining modifier.
++     *
++     * @param namespacedKey The namespaced key of the modifier.
++     * @return If the modifier was removed.
++     */
++    public static boolean removeGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
++        return customMiningMultipliers.remove(namespacedKey) != null;
 +    }
 +
-+    public static @Nullable Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> removeGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
-+        return customMiningMultipliers.remove(namespacedKey);
-+    }
-+
-+    public static @Nullable Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> getGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
++    /**
++     * Gets the mining speed multiplier for a player and block.
++     *
++     * @param namespacedKey The namespaced key of the modifier.
++     * @return The mining speed function.
++     */
++    public static @Nullable BiFunction<@NotNull Player, @NotNull BlockState, @Nullable Float> getGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
 +        return customMiningMultipliers.get(namespacedKey);
 +    }
 +
-+    public static @NotNull Map<@NotNull NamespacedKey, @NotNull Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float>> getGlobalMiningModifiers() {
-+        return customMiningMultipliers;
++    public static @NotNull Map<@NotNull NamespacedKey, @NotNull BiFunction<@NotNull Player, @NotNull BlockState, @Nullable Float>> getGlobalMiningModifiers() {
++        return ImmutableMap.copyOf(customMiningMultipliers);
 +    }
 +
 +    private Tentacles() {
