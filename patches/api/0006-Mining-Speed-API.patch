@@ -1,0 +1,75 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Sun, 6 Nov 2022 11:38:12 +1100
+Subject: [PATCH] Mining Speed API
+
+
+diff --git a/src/main/java/dev/racci/tentacles/Tentacles.java b/src/main/java/dev/racci/tentacles/Tentacles.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ad4d500cd5969a672d1e00f8ea6425f1af65aa49
+--- /dev/null
++++ b/src/main/java/dev/racci/tentacles/Tentacles.java
+@@ -0,0 +1,39 @@
++package dev.racci.tentacles;
++
++import it.unimi.dsi.fastutil.Pair;
++import java.util.HashMap;
++import java.util.Map;
++import java.util.function.BiPredicate;
++import org.bukkit.NamespacedKey;
++import org.bukkit.block.BlockState;
++import org.bukkit.entity.Player;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++public class Tentacles {
++    private static final Map<NamespacedKey, Pair<BiPredicate<Player, BlockState>, Float>> customMiningMultipliers = new HashMap<>();
++
++    public static @NotNull Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> addGlobalMiningModifier(
++        @NotNull final NamespacedKey namespacedKey,
++        final float multiplier,
++        @NotNull final BiPredicate<Player, BlockState> predicate
++    ) {
++        return customMiningMultipliers.compute(namespacedKey, (key, pair) -> Pair.of(predicate, multiplier));
++    }
++
++    public static @Nullable Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> removeGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
++        return customMiningMultipliers.remove(namespacedKey);
++    }
++
++    public static @Nullable Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float> getGlobalMiningModifier(@NotNull final NamespacedKey namespacedKey) {
++        return customMiningMultipliers.get(namespacedKey);
++    }
++
++    public static @NotNull Map<@NotNull NamespacedKey, @NotNull Pair<@NotNull BiPredicate<@NotNull Player, @NotNull BlockState>, @NotNull Float>> getGlobalMiningModifiers() {
++        return customMiningMultipliers;
++    }
++
++    private Tentacles() {
++        throw new UnsupportedOperationException("Tentacles is a static class");
++    }
++}
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 9c2dcca0b6e34a3083226360575f0956a077d767..7cc289ee1a033d91210dd56360928e63f2cce091 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -3007,4 +3007,19 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      */
+     void sendDeathScreen(@NotNull Component message, @Nullable Entity killer);
+     // Purpur end
++
++    // Tentacles start
++
++    /**
++     * Gets if the player has always correct tool
++     * @return true if the player has always correct tool
++     */
++    boolean isAlwaysCorrectTool();
++
++    /**
++     * Sets whether the player is always using the correct tool.
++     * @param alwaysCorrectTool Whether the player is always using the correct tool.
++     */
++    void setAlwaysCorrectTool(boolean alwaysCorrectTool);
++    // Tentacles end
+ }
