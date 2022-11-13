@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 967647c7dc0a4c2d762e7133fe969106f7d8ecba..2a2f7252d5e1967ae0c2fcc42dfdb1b7abd2f63c 100644
+index 193b6621d6506a04bc1f9f23571aeb2e635d562c..6c54cde322ffe2c4cb90148f2e4e9321faac1188 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -340,7 +340,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -25,7 +25,7 @@ index 967647c7dc0a4c2d762e7133fe969106f7d8ecba..2a2f7252d5e1967ae0c2fcc42dfdb1b7
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -2307,6 +2308,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2308,6 +2309,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -37,7 +37,7 @@ index 967647c7dc0a4c2d762e7133fe969106f7d8ecba..2a2f7252d5e1967ae0c2fcc42dfdb1b7
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2479,6 +2485,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2480,6 +2486,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
              // Purpur end
@@ -128,7 +128,7 @@ index 5b25c686aab37af1ea835116b1d28e3ebc1bb745..c41e4af52658012632f08f291eaa5556
          return this.tickCount % 5 == 0 && this.getDeltaMovement().x != 0.0D && this.getDeltaMovement().z != 0.0D && !this.isSpectator() && EnchantmentHelper.hasSoulSpeed(this) && this.onSoulSpeedBlock();
      }
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index e87a436711e179a4384630de41188c09a75a7f0d..49831829bb7f75ce659d61af167cd1f034fc6212 100644
+index 1b7e38538881ba00ffdbe9226952627151532c5c..8e2c28e25ea68a757c78b77308f5027f624caa79 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -305,6 +305,11 @@ public abstract class Player extends LivingEntity {
