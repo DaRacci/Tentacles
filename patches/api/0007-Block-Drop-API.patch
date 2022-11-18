@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: DaRacci <racci@racci.dev>
+Date: Fri, 18 Nov 2022 21:40:58 +1100
+Subject: [PATCH] Block Drop API
+
+
+diff --git a/src/main/java/dev/racci/tentacles/Tentacles.java b/src/main/java/dev/racci/tentacles/Tentacles.java
+index 430769228e281165b78fd6664283236b738fd71f..a4950118b160d2604c51d08eb9e44eeac281633f 100644
+--- a/src/main/java/dev/racci/tentacles/Tentacles.java
++++ b/src/main/java/dev/racci/tentacles/Tentacles.java
+@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
+ 
+ public class Tentacles {
+     private static final Map<NamespacedKey, BiFunction<Player, BlockState, Float>> customMiningMultipliers = new HashMap<>();
++    private static final Map<NamespacedKey, BiFunction<Player, BlockState, Boolean>> customToolConditions = new HashMap<>();
+ 
+     /**
+      * Registers a custom mining modifier.
+@@ -62,7 +63,32 @@ public class Tentacles {
+         return ImmutableMap.copyOf(customMiningMultipliers);
+     }
+ 
++    /**
++     * Registers a custom block drop condition.
++     *
++     * @param namespacedKey The namespaced key of the condition.
++     * @param predicate The predicate to check if the tool is correct for the block.
++     */
++    public static void addGlobalBlockDropCondition(
++        @NotNull final NamespacedKey namespacedKey,
++        @NotNull final BiFunction<@NotNull Player, @NotNull BlockState, @Nullable Boolean> predicate
++    ) { customToolConditions.put(namespacedKey, predicate); }
++
++    /**
++     * Removes a custom tool condition.
++     *
++     * @param namespacedKey The namespaced key of the condition.
++     * @return If the condition was removed.
++     */
++    public static boolean removeGlobalBlockDropCondition(@NotNull final NamespacedKey namespacedKey) {
++        return customToolConditions.remove(namespacedKey) != null;
++    }
++
++    public static @NotNull Map<@NotNull NamespacedKey, @NotNull BiFunction<@NotNull Player, @NotNull BlockState, @Nullable Boolean>> getGlobalBlockDropCondition() {
++        return ImmutableMap.copyOf(customToolConditions);
++    }
++
+     private Tentacles() {
+         throw new UnsupportedOperationException("Tentacles is a static class");
+     }
+-}
++}
+\ No newline at end of file
