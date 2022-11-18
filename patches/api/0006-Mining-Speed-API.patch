@@ -78,27 +78,3 @@ index 0000000000000000000000000000000000000000..430769228e281165b78fd6664283236b
 +        throw new UnsupportedOperationException("Tentacles is a static class");
 +    }
 +}
-diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 9c2dcca0b6e34a3083226360575f0956a077d767..7cc289ee1a033d91210dd56360928e63f2cce091 100644
---- a/src/main/java/org/bukkit/entity/Player.java
-+++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3007,4 +3007,19 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
-      */
-     void sendDeathScreen(@NotNull Component message, @Nullable Entity killer);
-     // Purpur end
-+
-+    // Tentacles start
-+
-+    /**
-+     * Gets if the player has always correct tool
-+     * @return true if the player has always correct tool
-+     */
-+    boolean isAlwaysCorrectTool();
-+
-+    /**
-+     * Sets whether the player is always using the correct tool.
-+     * @param alwaysCorrectTool Whether the player is always using the correct tool.
-+     */
-+    void setAlwaysCorrectTool(boolean alwaysCorrectTool);
-+    // Tentacles end
- }
