@@ -5,7 +5,7 @@ Subject: [PATCH] Block Drop API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 566e09146a76f194f838754613703d5dad574943..d309bafd27ed80fdb902385eabc3f78c03d66f58 100644
+index 566e09146a76f194f838754613703d5dad574943..86deab6e30278bf2e8a7939505b64b782c475223 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -271,6 +271,7 @@ public class ServerPlayer extends Player {
@@ -24,7 +24,7 @@ index 566e09146a76f194f838754613703d5dad574943..d309bafd27ed80fdb902385eabc3f78c
          // CraftBukkit start
          if (this.joining) {
              this.joining = false;
-@@ -2690,5 +2692,22 @@ public class ServerPlayer extends Player {
+@@ -2690,5 +2692,23 @@ public class ServerPlayer extends Player {
  
          return it.unimi.dsi.fastutil.Pair.of(finalDestroySpeed.get(), baseSpeed != finalDestroySpeed.get());
      }
@@ -37,10 +37,11 @@ index 566e09146a76f194f838754613703d5dad574943..d309bafd27ed80fdb902385eabc3f78c
 +    public it.unimi.dsi.fastutil.Pair<Boolean, Boolean> hasCorrectToolForDropsPair(BlockState state) {
 +        return blockDropCache.computeIfAbsent(state, s -> {
 +            final boolean defaultResult = super.hasCorrectToolForDrops(s);
++            final var bukkitItem = this.getInventory().getSelected().asBukkitCopy();
 +            final var bukkitState = org.bukkit.craftbukkit.block.CraftBlockStates.getBlockState(s, null);
 +            final var bukkitPlayer = (org.bukkit.entity.Player) this.getBukkitEntity();
 +            return dev.racci.tentacles.Tentacles.getGlobalBlockDropCondition().values().stream()
-+                .map(condition -> condition.apply(bukkitPlayer, bukkitState))
++                .map(condition -> condition.test(bukkitPlayer, bukkitState, bukkitItem))
 +                .filter(Objects::nonNull)
 +                .findFirst().map(result -> it.unimi.dsi.fastutil.Pair.of(result, result != defaultResult)).orElseGet(() -> it.unimi.dsi.fastutil.Pair.of(defaultResult, false));
 +        });
