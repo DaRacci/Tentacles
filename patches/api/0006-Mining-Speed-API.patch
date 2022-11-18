@@ -6,14 +6,13 @@ Subject: [PATCH] Mining Speed API
 
 diff --git a/src/main/java/dev/racci/tentacles/Tentacles.java b/src/main/java/dev/racci/tentacles/Tentacles.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..1e2bdefd48acc1b77dc4910900876724aed97081
+index 0000000000000000000000000000000000000000..430769228e281165b78fd6664283236b738fd71f
 --- /dev/null
 +++ b/src/main/java/dev/racci/tentacles/Tentacles.java
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,68 @@
 +package dev.racci.tentacles;
 +
 +import com.google.common.collect.ImmutableMap;
-+import it.unimi.dsi.fastutil.Pair;
 +import java.util.HashMap;
 +import java.util.Map;
 +import java.util.function.BiFunction;
