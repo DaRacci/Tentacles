@@ -5,7 +5,7 @@ Subject: [PATCH] Mining Speed API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 14b2c36049c91a8abfc545e2fb5e3d6f908370e8..891858264f89b61c34f8db296ab8aa0a32eb4b61 100644
+index 2fb0398fa693a0ce0d298c15426d4b592e69195e..d3172d264114d2e52f35a291d1d403eb20b7e0d1 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -6,12 +6,19 @@ import com.mojang.authlib.GameProfile;
@@ -213,7 +213,7 @@ index 4816b5bd54ae6e080af4c19df43d57e852e76146..dd7f998ac58febe8d71a8ff206b14446
                  this.debugLogging(pos, true, sequence, "aborted destroying");
  
 diff --git a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
-index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..d825c918562e740e774e7daa4fd8fee67f271c92 100644
+index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..e9e40ae0c9112a5241481c2a0484fd46d7bb28b8 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 @@ -3,6 +3,7 @@ package net.minecraft.world.level.block.state;
@@ -260,7 +260,7 @@ index bcc4c1af0fe153ed87e55706a1a6a5c6e945fec8..d825c918562e740e774e7daa4fd8fee6
 +                    speed *= 0.3F;
 +                }
 +
-+                return Pair.of(speed, speedPair.right() || serverPlayer.alwaysCorrectTool);
++                return Pair.of(speed, speedPair.right() || (!player.hasCorrectToolForDrops(state) && serverPlayer.alwaysCorrectTool));
 +            }
 +
 +            final float toolModifier = player.hasCorrectToolForDrops(state) ? 30F : 100F;
