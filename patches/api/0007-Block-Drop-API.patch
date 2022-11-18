@@ -67,7 +67,7 @@ index 430769228e281165b78fd6664283236b738fd71f..f1e25ea48862ab35c8a72c87c353900a
 \ No newline at end of file
 diff --git a/src/main/java/dev/racci/tentacles/utils/TriPredicate.java b/src/main/java/dev/racci/tentacles/utils/TriPredicate.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..2e2d992099ab7f5e046f65c49a523a538c99feef
+index 0000000000000000000000000000000000000000..57a58be5e1988ad32388038f995e4871009fd3da
 --- /dev/null
 +++ b/src/main/java/dev/racci/tentacles/utils/TriPredicate.java
 @@ -0,0 +1,75 @@
@@ -101,7 +101,7 @@ index 0000000000000000000000000000000000000000..2e2d992099ab7f5e046f65c49a523a53
 +     * @param r the third input argument
 +     * @return {@code true} if the input arguments match the predicate, otherwise {@code false}
 +     */
-+    @Nullable Boolean test(T t, U u, R r);
++    @Nullable Boolean test(@Nullable T t, @Nullable U u, @Nullable R r);
 +
 +    /**
 +     * Returns a composed predicate that represents a short-circuiting logical
@@ -116,7 +116,7 @@ index 0000000000000000000000000000000000000000..2e2d992099ab7f5e046f65c49a523a53
 +     * @param other a predicate that will be logically-ANDed with this predicate
 +     * @return a composed predicate that represents the short-circuiting logical AND of this predicate and the {@code other} predicate.
 +     */
-+    default TriPredicate<T, U, R> and(@NotNull TriPredicate<? super T, ? super U, ? super R> other) {
++    default @NotNull TriPredicate<T, U, R> and(@NotNull TriPredicate<? super T, ? super U, ? super R> other) {
 +        return (T t, U u, R r) -> Boolean.TRUE.equals(test(t, u, r)) && Boolean.TRUE.equals(other.test(t, u, r));
 +    }
 +
@@ -125,7 +125,7 @@ index 0000000000000000000000000000000000000000..2e2d992099ab7f5e046f65c49a523a53
 +     *
 +     * @return a predicate that represents the logical negation of this predicate
 +     */
-+    default TriPredicate<T, U, R> negate() {
++    default @NotNull TriPredicate<T, U, R> negate() {
 +        return (T t, U u, R r) -> !Boolean.TRUE.equals(test(t, u, r));
 +    }
 +
@@ -142,7 +142,7 @@ index 0000000000000000000000000000000000000000..2e2d992099ab7f5e046f65c49a523a53
 +     * @param other a predicate that will be logically-ORed with this predicate
 +     * @return a composed predicate that represents the short-circuiting logical OR of this predicate and the {@code other} predicate.
 +     */
-+    default TriPredicate<T, U, R> or(@NotNull TriPredicate<? super T, ? super U, ? super R> other) {
++    default @NotNull TriPredicate<T, U, R> or(@NotNull TriPredicate<? super T, ? super U, ? super R> other) {
 +        return (T t, U u, R r) -> Boolean.TRUE.equals(test(t, u, r)) || Boolean.TRUE.equals(other.test(t, u, r));
 +    }
 +}
