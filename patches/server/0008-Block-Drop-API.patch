@@ -5,18 +5,18 @@ Subject: [PATCH] Block Drop API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 9f5afc4cccae3237314ca723b32a229bedd646f3..87cfe84e120f4f3d18fc0f6ee5f2f8a15775073c 100644
+index 566e09146a76f194f838754613703d5dad574943..d309bafd27ed80fdb902385eabc3f78c03d66f58 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -275,6 +275,7 @@ public class ServerPlayer extends Player {
+@@ -271,6 +271,7 @@ public class ServerPlayer extends Player {
      public double lastEntitySpawnRadiusSquared; // Paper - optimise isOutsideRange, this field is in blocks
      public final com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> cachedSingleHashSet; // Paper
      public org.bukkit.event.player.PlayerQuitEvent.QuitReason quitReason = null; // Paper - there are a lot of changes to do if we change all methods leading to the event
-+    private final java.util.HashMap<BlockState, Pair<Boolean, Boolean>> blockDropCache = new java.util.HashMap<>(); // Tentacles - Block Drop cache, reset each tick.
++    private final java.util.HashMap<BlockState, it.unimi.dsi.fastutil.Pair<Boolean, Boolean>> blockDropCache = new java.util.HashMap<>(); // Tentacles - Block Drop cache, reset each tick.
  
      public ServerPlayer(MinecraftServer server, ServerLevel world, GameProfile profile, @Nullable ProfilePublicKey publicKey) {
          super(world, world.getSharedSpawnPos(), world.getSharedSpawnAngle(), profile, publicKey);
-@@ -645,6 +646,7 @@ public class ServerPlayer extends Player {
+@@ -641,6 +642,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void tick() {
@@ -24,9 +24,9 @@ index 9f5afc4cccae3237314ca723b32a229bedd646f3..87cfe84e120f4f3d18fc0f6ee5f2f8a1
          // CraftBukkit start
          if (this.joining) {
              this.joining = false;
-@@ -2694,5 +2696,22 @@ public class ServerPlayer extends Player {
+@@ -2690,5 +2692,22 @@ public class ServerPlayer extends Player {
  
-         return Pair.of(finalDestroySpeed.get(), baseSpeed != finalDestroySpeed.get());
+         return it.unimi.dsi.fastutil.Pair.of(finalDestroySpeed.get(), baseSpeed != finalDestroySpeed.get());
      }
 +
 +    @Override
@@ -34,26 +34,26 @@ index 9f5afc4cccae3237314ca723b32a229bedd646f3..87cfe84e120f4f3d18fc0f6ee5f2f8a1
 +        return this.hasCorrectToolForDropsPair(state).left();
 +    }
 +
-+    public Pair<Boolean, Boolean> hasCorrectToolForDropsPair(BlockState state) {
++    public it.unimi.dsi.fastutil.Pair<Boolean, Boolean> hasCorrectToolForDropsPair(BlockState state) {
 +        return blockDropCache.computeIfAbsent(state, s -> {
 +            final boolean defaultResult = super.hasCorrectToolForDrops(s);
-+            final var bukkitState = CraftBlockStates.getBlockState(s, null);
++            final var bukkitState = org.bukkit.craftbukkit.block.CraftBlockStates.getBlockState(s, null);
 +            final var bukkitPlayer = (org.bukkit.entity.Player) this.getBukkitEntity();
 +            return dev.racci.tentacles.Tentacles.getGlobalBlockDropCondition().values().stream()
 +                .map(condition -> condition.apply(bukkitPlayer, bukkitState))
 +                .filter(Objects::nonNull)
-+                .findFirst().map(result -> Pair.of(result, result != defaultResult)).orElseGet(() -> Pair.of(defaultResult, false));
++                .findFirst().map(result -> it.unimi.dsi.fastutil.Pair.of(result, result != defaultResult)).orElseGet(() -> it.unimi.dsi.fastutil.Pair.of(defaultResult, false));
 +        });
 +    }
      // Tentacles end
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
-index 5b0082ed97dfd1b5d8dc8f98e5196e0fbfae3751..825ffd99246856467be25cfa312d7e7e926144f4 100644
+index f0930b0d8dae2844bfc934d8e82981ce33256c41..8d9ff0a346ba8516780e16c7ad12a2afc2b83625 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
-@@ -901,7 +901,10 @@ public abstract class BlockBehaviour {
+@@ -899,7 +899,10 @@ public abstract class BlockBehaviour {
  
-             if (player instanceof ServerPlayer serverPlayer) {
+             if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                  final var speedPair = serverPlayer.getDestroySpeedPair(state);
 -                final float toolModifier = player.hasCorrectToolForDrops(state) ? 30F : 100F;
 +                // Tentacles start - Block Drop API
