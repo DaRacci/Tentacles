@@ -28,12 +28,6 @@ jobs:
         run: |
           ./scripts/updateUpstream.sh
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
       - uses: dorny/paths-filter@v2
         id: changes
         with:
@@ -41,6 +35,12 @@ jobs:
           filters: |
             patches:
               - 'patches/**'
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
   callworkflow:
     needs: upstream
