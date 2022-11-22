@@ -5,7 +5,7 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d5fcafbcdc1264b4b491936cf71ce634a11a2450..5b25c686aab37af1ea835116b1d28e3ebc1bb745 100644
+index e1dec57243c85ac63eb2efafa255885062e57370..dce7540b02d90e3ff1f2eec7d2bee63691c49592 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -268,6 +268,7 @@ public abstract class LivingEntity extends Entity {
@@ -16,7 +16,7 @@ index d5fcafbcdc1264b4b491936cf71ce634a11a2450..5b25c686aab37af1ea835116b1d28e3e
      // Tentacles end
  
      @Override
-@@ -2777,7 +2778,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2779,7 +2780,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canStandOnFluid(FluidState state) {
@@ -26,7 +26,7 @@ index d5fcafbcdc1264b4b491936cf71ce634a11a2450..5b25c686aab37af1ea835116b1d28e3e
  
      public void travel(Vec3 movementInput) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 6aa4ff45a30e32464bde16318a35340ff8c2b91f..2d636ac4dace64492196bf3d1b41b947a59fe9d1 100644
+index 6a948441f075b2ddb124473bf397bd3affe18e83..ade68236f04f3a23efe39beb274f35d829bcc5f3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
