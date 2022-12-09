@@ -5,12 +5,12 @@ Subject: [PATCH] Water Breathing API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 1ec9a48f2f44f5bd647e0661423ae90970aee262..d5fcafbcdc1264b4b491936cf71ce634a11a2450 100644
+index f23829690d2be20af50256e4d985e3e342415d54..da01da05aca0f5cda9543d7ab1ef81e9d007ba57 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -265,6 +265,10 @@ public abstract class LivingEntity extends Entity {
-     public org.bukkit.craftbukkit.entity.CraftLivingEntity getBukkitLivingEntity() { return (org.bukkit.craftbukkit.entity.CraftLivingEntity) super.getBukkitEntity(); } // Paper
+@@ -266,6 +266,10 @@ public abstract class LivingEntity extends Entity {
      public boolean silentDeath = false; // Paper - mark entity as dying silently for cancellable death event
+     public net.kyori.adventure.util.TriState frictionState = net.kyori.adventure.util.TriState.NOT_SET; // Paper
      protected boolean shouldBurnInDay = false;  public boolean shouldBurnInDay() { return this.shouldBurnInDay; } public void setShouldBurnInDay(boolean shouldBurnInDay) { this.shouldBurnInDay = shouldBurnInDay; } // Purpur
 +    // Tentacles start
 +    @Nullable
@@ -19,7 +19,7 @@ index 1ec9a48f2f44f5bd647e0661423ae90970aee262..d5fcafbcdc1264b4b491936cf71ce634
  
      @Override
      public float getBukkitYaw() {
-@@ -377,7 +381,7 @@ public abstract class LivingEntity extends Entity {
+@@ -378,7 +382,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canBreatheUnderwater() {
@@ -29,10 +29,10 @@ index 1ec9a48f2f44f5bd647e0661423ae90970aee262..d5fcafbcdc1264b4b491936cf71ce634
  
      public float getSwimAmount(float tickDelta) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index cdfdcaa296a685f23b7aea683d68cb794ac1e0c7..6aa4ff45a30e32464bde16318a35340ff8c2b91f 100644
+index 7d4c8d205fa7fdc64358ad8fac6fa7d7fc9166a0..d5faed7430522884560e301fabb59b30ccc934a7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1012,4 +1012,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1071,4 +1071,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end

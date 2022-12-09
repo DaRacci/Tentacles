@@ -5,10 +5,10 @@ Subject: [PATCH] Standing on fluid API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index e1dec57243c85ac63eb2efafa255885062e57370..dce7540b02d90e3ff1f2eec7d2bee63691c49592 100644
+index da01da05aca0f5cda9543d7ab1ef81e9d007ba57..1b2abcd8c40d8e91e344015751c43d2519b124da 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -268,6 +268,7 @@ public abstract class LivingEntity extends Entity {
+@@ -269,6 +269,7 @@ public abstract class LivingEntity extends Entity {
      // Tentacles start
      @Nullable
      public Boolean canBreathUnderwater = null;
@@ -16,7 +16,7 @@ index e1dec57243c85ac63eb2efafa255885062e57370..dce7540b02d90e3ff1f2eec7d2bee636
      // Tentacles end
  
      @Override
-@@ -2779,7 +2780,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2794,7 +2795,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public boolean canStandOnFluid(FluidState state) {
@@ -26,7 +26,7 @@ index e1dec57243c85ac63eb2efafa255885062e57370..dce7540b02d90e3ff1f2eec7d2bee636
  
      public void travel(Vec3 movementInput) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 6a948441f075b2ddb124473bf397bd3affe18e83..ade68236f04f3a23efe39beb274f35d829bcc5f3 100644
+index d5faed7430522884560e301fabb59b30ccc934a7..4df650dc521bfc1ecf3d8fe8b380dfb49668abd6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -30,9 +30,12 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
@@ -50,7 +50,7 @@ index 6a948441f075b2ddb124473bf397bd3affe18e83..ade68236f04f3a23efe39beb274f35d8
  
  public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      private CraftEntityEquipment equipment;
-@@ -1023,5 +1027,29 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1082,5 +1086,30 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      public boolean canBreathUnderwater() {
          return getHandle().canBreatheUnderwater();
      }
@@ -71,8 +71,9 @@ index 6a948441f075b2ddb124473bf397bd3affe18e83..ade68236f04f3a23efe39beb274f35d8
 +        return getHandle().canStandOnFluid(convertFromBukkit(fluid).defaultFluidState());
 +    }
 +
-+    private FlowingFluid convertFromBukkit(Fluid fluid) {
++    private net.minecraft.world.level.material.Fluid convertFromBukkit(Fluid fluid) {
 +        return switch (fluid) {
++            case EMPTY -> Fluids.EMPTY;
 +            case LAVA -> Fluids.LAVA;
 +            case WATER -> Fluids.WATER;
 +            case FLOWING_LAVA -> Fluids.FLOWING_LAVA;

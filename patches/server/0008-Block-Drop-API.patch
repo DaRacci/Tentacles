@@ -5,7 +5,7 @@ Subject: [PATCH] Block Drop API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 566e09146a76f194f838754613703d5dad574943..86deab6e30278bf2e8a7939505b64b782c475223 100644
+index 888aaa1094b57b97895f4cd5dabb91d547325eb6..03793cb3b81f43a2ed67522d2cd4eb80a831812b 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -271,6 +271,7 @@ public class ServerPlayer extends Player {
@@ -16,7 +16,7 @@ index 566e09146a76f194f838754613703d5dad574943..86deab6e30278bf2e8a7939505b64b78
  
      public ServerPlayer(MinecraftServer server, ServerLevel world, GameProfile profile, @Nullable ProfilePublicKey publicKey) {
          super(world, world.getSharedSpawnPos(), world.getSharedSpawnAngle(), profile, publicKey);
-@@ -641,6 +642,7 @@ public class ServerPlayer extends Player {
+@@ -648,6 +649,7 @@ public class ServerPlayer extends Player {
  
      @Override
      public void tick() {
@@ -24,7 +24,7 @@ index 566e09146a76f194f838754613703d5dad574943..86deab6e30278bf2e8a7939505b64b78
          // CraftBukkit start
          if (this.joining) {
              this.joining = false;
-@@ -2690,5 +2692,23 @@ public class ServerPlayer extends Player {
+@@ -2702,5 +2704,23 @@ public class ServerPlayer extends Player {
  
          return it.unimi.dsi.fastutil.Pair.of(finalDestroySpeed.get(), baseSpeed != finalDestroySpeed.get());
      }

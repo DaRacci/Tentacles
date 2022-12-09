@@ -5,10 +5,10 @@ Subject: [PATCH] Mining Speed API
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 2fb0398fa693a0ce0d298c15426d4b592e69195e..566e09146a76f194f838754613703d5dad574943 100644
+index bd472130d94ec2a7507a585809fa99047eb60d19..888aaa1094b57b97895f4cd5dabb91d547325eb6 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -2669,4 +2669,26 @@ public class ServerPlayer extends Player {
+@@ -2681,4 +2681,26 @@ public class ServerPlayer extends Player {
          this.compassBar = compassBar;
      }
      // Purpur end

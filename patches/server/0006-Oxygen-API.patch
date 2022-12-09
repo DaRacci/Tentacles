@@ -5,7 +5,7 @@ Subject: [PATCH] Oxygen-API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index dd13fc7cbf82948b1474ea33411e64b465608672..d5c0a3d46f051ce0be8a2447714a2de4f0632c40 100644
+index a6ed2161a39a50b77ffa30452b5aa30036a04ff9..11e73fb7d429be6163c7307063d86d3f83f1988a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -340,7 +340,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -50,10 +50,10 @@ index dd13fc7cbf82948b1474ea33411e64b465608672..d5c0a3d46f051ce0be8a2447714a2de4
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index dce7540b02d90e3ff1f2eec7d2bee63691c49592..a4b71ac95be2443c9283de588992348feb70e8eb 100644
+index 1b2abcd8c40d8e91e344015751c43d2519b124da..a180c305028d50277af893541d1b1090e8f5c8c2 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -427,28 +427,24 @@ public abstract class LivingEntity extends Entity {
+@@ -428,28 +428,24 @@ public abstract class LivingEntity extends Entity {
                  boolean flag1 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(this) && (!flag || !((net.minecraft.world.entity.player.Player) this).getAbilities().invulnerable);
  
                  if (flag1) {
@@ -94,7 +94,7 @@ index dce7540b02d90e3ff1f2eec7d2bee63691c49592..a4b71ac95be2443c9283de588992348f
              }
  
              if (!this.level.isClientSide) {
-@@ -508,6 +504,32 @@ public abstract class LivingEntity extends Entity {
+@@ -509,6 +505,32 @@ public abstract class LivingEntity extends Entity {
          //this.level.getProfiler().pop(); // Purpur
      }
  
@@ -144,10 +144,10 @@ index c574a93afff2996d51f3ffbdfde4e534f22375f5..0d66e8fae1de9b6af018177763471503
          if (!this.level.isClientSide && this.containerMenu != null && !this.containerMenu.stillValid(this)) {
              this.closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.CANT_USE); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 10208b3be330e8a02a4b248a3861ba978e64aab4..8875d75960ad35858bfea491e87c7d96d737f404 100644
+index ede4d01f59de68326c65bb1b08ce29ddb6fc94d5..869bd0c32be33ab192722b24d2fe7bd45827b540 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1426,4 +1426,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1432,4 +1432,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          getHandle().immuneToFire = fireImmune;
      }
      // Purpur end
