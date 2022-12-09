@@ -33,8 +33,8 @@ jobs:
         with:
           base: ${{ github.ref }}
           filters: |
-            patches:
-              - 'patches/**'
+            properties:
+              - 'gradle.properties'
 
       - name: Push changes
         uses: ad-m/github-push-action@master
@@ -44,7 +44,7 @@ jobs:
 
   callworkflow:
     needs: upstream
-    if: ${{ needs.upstream.outputs.patches == 'true' }}
+    if: ${{ needs.upstream.outputs.properties == 'true' }}
     uses: DaRacci/Tentacles/.github/workflows/build.yml@ver/1.19.2
     with:
       publish: 'true'
